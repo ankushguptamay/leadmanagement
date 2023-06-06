@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         lastName: {
             type: DataTypes.STRING,
-            allowNull: false
+            // allowNull: false
         },
         dateOfBirth: {
             type: DataTypes.DATE,
@@ -63,11 +63,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         role: {
             type: DataTypes.JSON,
-            allowNull: false
+            // allowNull: false
         },
         position: {
             type: DataTypes.STRING,
-            allowNull: false
+            // allowNull: false
         }
     })
     return UserInformation;
