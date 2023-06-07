@@ -5,25 +5,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        firstName: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        middleName: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        lastName: {
-            type: DataTypes.STRING,
-            // allowNull: false
-        },
-        dateOfBirth: {
-            type: DataTypes.DATE,
-            allowNull: true
-        },
-        gender: {
-            type: DataTypes.STRING,
-            allowNull: true
         },
         email: {
             type: DataTypes.STRING,
@@ -35,39 +19,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
-        dateOfBirth: {
-            type: DataTypes.DATE
-        },
-        timeZone: {
+        userCode: {
             type: DataTypes.STRING,
-            allowNull: true
-        },
-        language: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        address: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        inetrest: {
-            type: DataTypes.STRING,
-            allowNull: true
-        },
-        bio: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
-        document: {
-            type: DataTypes.JSON
-        },
-        role: {
-            type: DataTypes.JSON,
-            // allowNull: false
-        },
-        position: {
-            type: DataTypes.STRING,
-            // allowNull: false
+            allowNull: false,
+            unique: true
         }
     })
     return UserInformation;

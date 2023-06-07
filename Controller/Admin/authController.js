@@ -1,6 +1,6 @@
 const db = require('../../Models');
 const AdminInformation = db.adminInformation;
-const { adminLogin, adminRegistration } = require("../../Middleware/Validation/adminValidation");
+const { adminLogin, adminRegistration } = require("../../Middleware/validation");
 const { JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");

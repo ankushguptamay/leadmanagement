@@ -17,7 +17,7 @@ exports.assignLeadToUser = async (req, res) => {
         // const name = await UserInformation.findOne({where:{id:userId}});
         res.status(200).send({
             success: true,
-            message: "Lead lead assign to user successfully!"
+            message: "Lead assign to user successfully!"
         });
     } catch (err) {
         res.status(500).send({

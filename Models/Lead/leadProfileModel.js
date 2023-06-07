@@ -5,14 +5,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        firstName: {
-            type: DataTypes.STRING
-        },
-        middleName: {
-            type: DataTypes.STRING
-        },
-        lastName: {
-            type: DataTypes.STRING
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false
         },
         gender: {
             type: DataTypes.STRING
@@ -37,6 +32,35 @@ module.exports = (sequelize, DataTypes) => {
         },
         requestType: {
             type: DataTypes.STRING
+        },
+        city: {
+            type: DataTypes.STRING
+        },
+        country: {
+            type: DataTypes.STRING
+        },
+        state: {
+            type: DataTypes.STRING
+        },
+        website: {
+            type: DataTypes.STRING
+        },
+        email: {
+            type: DataTypes.STRING
+        },
+        phoneNumber: {
+            type: DataTypes.STRING,
+        },
+        whatsAppNumber: {
+            type: DataTypes.STRING
+        },
+        leadCode: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        createrId: {
+            type: DataTypes.STRING,
+            defaultValue: null
         }
     })
     return LeadProfile;

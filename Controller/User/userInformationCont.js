@@ -1,5 +1,5 @@
 const db = require('../../Models');
-const { userRegistration, userLogin, userLoginOTP } = require("../../Middleware/Validation/userValidation");
+const { userRegistration, userLogin, userLoginOTP } = require("../../Middleware/validation");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const UserInformation = db.userInformation;
@@ -13,11 +13,11 @@ const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
 exports.registerUser = async (req, res) => {
     try {
         // Validate body
-        // const { error } = userRegistration(req.body);
-        // if (error) {
-        //     console.log(error);
-        //     return res.status(400).send(error.details[0].message);
-        // }
+        const { error } = userRegistration(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
         // Checking is mobile number and Email allready present
         const user = await UserInformation.findOne({
             where: {
@@ -32,9 +32,27 @@ exports.registerUser = async (req, res) => {
                 message: "User already registered!"
             });
         }
+        // generate user code
+        let code;
+        const isUserCode = await UserInformation.findAll({
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        });
+        if (isUserCode.length == 0) {
+            code = "USER" + 1000;
+        } else {
+            let lastUserCode = isUserCode[isUserCode.length - 1];
+            let lastDigits = lastUserCode.userCode.substring(4);
+            let incrementedDigits = parseInt(lastDigits, 10) + 1;
+            code = "USER" + incrementedDigits;
+            //  console.log(code);
+        }
         // Creating User Information
         await UserInformation.create({
-            ...req.body
+            ...req.body,
+            adminInformationId: req.user.id,
+            userCode: code
         });
         res.status(200).send({
             success: true,
@@ -52,11 +70,11 @@ exports.registerUser = async (req, res) => {
 exports.login = async (req, res) => {
     try {
         // Validate body
-        // const { error } = userLogin(req.body);
-        // if (error) {
-        //     console.log(error);
-        //     return res.status(400).send(error.details[0].message);
-        // }
+        const { error } = userLogin(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
         // Checking is mobile number present or not
         const { phoneNumber } = req.body;
         const isNumber = await UserInformation.findOne({
@@ -70,6 +88,7 @@ exports.login = async (req, res) => {
                 message: "User not found! First register your self!"
             });
         }
+        console.log("hiiiiiiiii")
         // Sending OTP to mobile number
         const countryCode = "+91";
         await twilio.verify.v2
@@ -94,11 +113,11 @@ exports.login = async (req, res) => {
 exports.verifyLoginOtp = async (req, res) => {
     try {
         // Validate body
-        // const { error } = userLoginOTP(req.body);
-        // if (error) {
-        //     console.log(error);
-        //     return res.status(400).send(error.details[0].message);
-        // }
+        const { error } = userLoginOTP(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
         const { phoneNumber, phoneOTP } = req.body;
         const countryCode = "+91";
         // Checking is mobile number present or not
@@ -126,7 +145,7 @@ exports.verifyLoginOtp = async (req, res) => {
             const data = {
                 id: user.id,
                 email: user.email,
-                position: user.position
+                userCode: user.userCode
             }
             const authToken = jwt.sign(
                 data,
@@ -166,6 +185,27 @@ exports.userInformation = async (req, res) => {
             success: true,
             message: "User Information fetched successfully!",
             data: user
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.users = async (req, res) => {
+    try {
+        const users = await UserInformation.findAll({
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: "Users Information fetched successfully!",
+            data: users
         });
     } catch (err) {
         res.status(500).send({

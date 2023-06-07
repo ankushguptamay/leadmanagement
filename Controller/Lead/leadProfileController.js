@@ -1,16 +1,42 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
+const { createLeadValidation } = require("../../Middleware/validation");
 const LeadProfile = db.leadProfile;
 const UserInformation = db.userInformation;
-const LeadAddress = db.leadAddress;
-const LeadContact = db.leadContact;
-const LeadOrganisation = db.leadOrganisation;
 
 
 exports.createLead = async (req, res) => {
     try {
+        // Validate body
+        const { error } = createLeadValidation(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
+        // generate lead code
+        let code;
+        const isLeadCode = await LeadProfile.findAll({
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        });
+        if (isLeadCode.length == 0) {
+            code = "LEAD" + 1000;
+        } else {
+            let lastLeadCode = isLeadCode[isLeadCode.length - 1];
+            let lastDigits = lastLeadCode.leadCode.substring(4);
+            let incrementedDigits = parseInt(lastDigits, 10) + 1;
+            code = "LEAD" + incrementedDigits;
+            //  console.log(code);
+        }
+        let createrId;
+        if (req.user) {
+            createrId = req.user.id;
+        }
         await LeadProfile.create({
-            ...req.body
+            ...req.body,
+            createrId: createrId,
+            leadCode: code
         });
         res.status(200).send({
             success: true,
@@ -33,33 +59,15 @@ exports.getAllLeadByStatus = async (req, res) => {
                 where: {
                     status: req.query.status
                 },
-                include: [{
-                    model: LeadAddress,
-                    as: "address"
-                }],
-                include: [{
-                    model: LeadContact,
-                    as: "contact"
-                }],
-                include: [{
-                    model: LeadOrganisation,
-                    as: "organisation"
-                }]
+                order: [
+                    ['createdAt', 'ASC']
+                ]
             });
         } else {
             lead = await LeadProfile.findAll({
-                include: [{
-                    model: LeadAddress,
-                    as: "address"
-                }],
-                include: [{
-                    model: LeadContact,
-                    as: "contact"
-                }],
-                include: [{
-                    model: LeadOrganisation,
-                    as: "organisation"
-                }]
+                order: [
+                    ['createdAt', 'ASC']
+                ]
             });
         }
         res.status(200).send({
@@ -78,7 +86,7 @@ exports.getAllLeadByStatus = async (req, res) => {
 // find all lead for user 
 exports.getAllLeadForUser = async (req, res) => {
     try {
-        const lead = await UserInformation.findAll({
+        const lead = await UserInformation.findOne({
             where: {
                 [Op.and]: [
                     { id: req.user.id }, { email: req.user.email }
@@ -87,18 +95,9 @@ exports.getAllLeadForUser = async (req, res) => {
             include: [{
                 model: LeadProfile,
                 as: "leads",
-                include: [{
-                    model: LeadAddress,
-                    as: "address"
-                }],
-                include: [{
-                    model: LeadContact,
-                    as: "contact"
-                }],
-                include: [{
-                    model: LeadOrganisation,
-                    as: "organisation"
-                }]
+                // order: [
+                //     ['createdAt', 'ASC']
+                // ],
             }]
         })
         res.status(200).send({

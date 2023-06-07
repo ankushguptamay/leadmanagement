@@ -6,15 +6,15 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
         },
         userInformationId: {
-            type: DataTypes.STRING,
+            type: DataTypes.UUID,
             allowNull: false
         },
         leadProfileId:{
-            type:DataTypes.STRING,
+            type:DataTypes.UUID,
             allowNull: false
         },
         assignerId: {
-            type:DataTypes.STRING,
+            type:DataTypes.UUID,
             allowNull: false
         }
     })
