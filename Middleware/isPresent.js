@@ -29,7 +29,7 @@ exports.isUserPresentAll = async (req, res, next) => {
         const user = await UserInformation.findOne({
             where: {
                 [Op.and]: [
-                    { id: req.user.id }, { email: req.user.email }
+                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.userCode }
                 ]
             }
         });

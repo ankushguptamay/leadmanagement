@@ -2,8 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const LeadProfile = sequelize.define("leadProfile", {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true
+            defaultValue: DataTypes.UUIDV4
         },
         name: {
             type: DataTypes.STRING,
@@ -56,12 +55,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         leadCode: {
             type: DataTypes.STRING,
+            primaryKey: true,
             allowNull: false
         },
         createrId: {
             type: DataTypes.STRING,
             defaultValue: null
         }
+    }, {
+        paranoid:true
     })
     return LeadProfile;
 }

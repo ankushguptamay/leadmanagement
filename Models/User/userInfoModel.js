@@ -2,8 +2,7 @@ module.exports = (sequelize, DataTypes) => {
     const UserInformation = sequelize.define("userInformation", {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true
+            defaultValue: DataTypes.UUIDV4
         },
         name: {
             type: DataTypes.STRING,
@@ -21,9 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         userCode: {
             type: DataTypes.STRING,
-            allowNull: false,
-            unique: true
+            primaryKey: true,
+            allowNull: false
         }
+    }, {
+        paranoid:true
     })
     return UserInformation;
 }

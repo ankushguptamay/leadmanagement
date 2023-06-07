@@ -4,7 +4,6 @@ const { createLeadValidation } = require("../../Middleware/validation");
 const LeadProfile = db.leadProfile;
 const UserInformation = db.userInformation;
 
-
 exports.createLead = async (req, res) => {
     try {
         // Validate body
@@ -89,20 +88,67 @@ exports.getAllLeadForUser = async (req, res) => {
         const lead = await UserInformation.findOne({
             where: {
                 [Op.and]: [
-                    { id: req.user.id }, { email: req.user.email }
+                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.userCode }
                 ]
             },
             include: [{
                 model: LeadProfile,
                 as: "leads",
-                // order: [
-                //     ['createdAt', 'ASC']
-                // ],
+                order: [
+                    ['createdAt', 'ASC']
+                ],
+                // attributes: ['id', 'name', 'phoneNumber'],
             }]
         })
         res.status(200).send({
             success: true,
             message: "Lead Profile fetched successfully!",
+            data: lead
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.updateLeadProfile = async (req, res) => {
+    try {
+        const lead = await LeadProfile.findOne({
+            where:  { leadCode: req.params.leadCode }
+        })
+        if(!lead){
+            return res.status(400).send({
+                success: false,
+                message: "Lead Profile not found!"
+            });
+        }
+        await lead.destroy();
+        const{name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city, country,state, website, email, phoneNumber,whatsAppNumber}=req.body;
+        await LeadProfile.create({
+            name: name,
+            gender: gender,
+            jobTitle: jobTitle,
+            salutation: salutation,
+            leadOwner: leadOwner,
+            source: source,
+            status: status,
+            leadType: leadType,
+            requestType: requestType,
+            city: city,
+            country: country,
+            state: state,
+            website: website,
+            email:email,
+            phoneNumber: phoneNumber,
+            whatsAppNumber: whatsAppNumber,
+            leadCode: req.params.leadCode,
+            createrId: req.user.id
+        })
+        res.status(200).send({
+            success: true,
+            message: "Lead Profile updated successfully!",
             data: lead
         });
     } catch (err) {

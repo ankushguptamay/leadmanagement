@@ -31,6 +31,6 @@ db.userInformation = require('./User/userInfoModel.js')(sequelize, Sequelize);
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'adminInformationId' });
 
 db.leadProfile.belongsToMany(db.userInformation, { through: "lead_To_User", as: 'users' });
-db.userInformation.belongsToMany(db.leadProfile, { through: "lead_To_User", as: "leads" });
+db.userInformation.belongsToMany(db.leadProfile, { through: "lead_To_User",  as: "leads" });
 
 module.exports = db;

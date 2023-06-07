@@ -5,12 +5,12 @@ const UserInformation = db.userInformation;
 
 exports.assignLeadToUser = async (req, res) => {
     try {
-        const leadId = req.body.leadProfileId; // should be array
-        const userId = req.body.userInformationId;
-        for (let i = 0; i < leadId.length; i++) {
+        const leadCode = req.body.leadProfileCode; // should be array
+        const userCode = req.body.userInformationCode;
+        for (let i = 0; i < leadCode.length; i++) {
             await Lead_To_User.create({
-                leadProfileId: leadId[i],
-                userInformationId: userId,
+                leadProfileLeadCode: leadCode[i],
+                userInformationUserCode: userCode,
                 assignerId: req.user.id
             });
         }

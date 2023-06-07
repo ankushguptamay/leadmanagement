@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
-const { createLead, getAllLeadByStatus } = require('../Controller/Lead/leadProfileController');
+const { createLead, getAllLeadByStatus, updateLeadProfile } = require('../Controller/Lead/leadProfileController');
 const { registerUser, users } = require('../Controller/User/userInformationCont');
 const { assignLeadToUser } = require('../Controller/Lead/assignLeadController');
 const leadManagement = express.Router();
@@ -19,6 +19,7 @@ leadManagement.get("/users", jwt.verifyJWT, isAdminPresent, users);
 
 leadManagement.post("/createLead", jwt.verifyJWT, isAdminPresent, createLead);
 leadManagement.get("/leadByStatus", jwt.verifyJWT, isAdminPresent, getAllLeadByStatus);
+leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isAdminPresent, updateLeadProfile);
 
 leadManagement.post("/assignLeadToUser", jwt.verifyJWT, isAdminPresent, assignLeadToUser);
 
