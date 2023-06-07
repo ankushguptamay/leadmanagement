@@ -1,9 +1,4 @@
 const express = require('express');
-const { getLeadRequestType } = require('../Controller/Admin/leadRequestTypeController');
-const { getLeadStatus } = require('../Controller/Admin/leadStatusController');
-const { getLeadType } = require('../Controller/Admin/leadTypeController');
-const { getUserPosition } = require('../Controller/Admin/positionController');
-const { getUserRole } = require('../Controller/Admin/roleController');
 const { login, verifyLoginOtp, userInformation } = require('../Controller/User/userInformationCont');
 const { createLead, getAllLeadForUser } = require('../Controller/Lead/leadProfileController');
 const { createLeadOrganisation, updateLeadOrganisation } = require('../Controller/Lead/leadOrganisationCont');
@@ -18,12 +13,6 @@ const { isUserPresentAll } = require('../Middleware/isPresent');
 leadManagement.post("/login", login);
 leadManagement.post("/verifyLoginOtp", verifyLoginOtp);
 leadManagement.get("/userInformation", jwt.verifyJWT, isUserPresentAll, userInformation);
-
-// leadManagement.get("/leadRequestType", jwt.verifyJWT, isUserPresentAll, getLeadRequestType);
-// leadManagement.get("/leadStatus", jwt.verifyJWT, isUserPresentAll, getLeadStatus);
-// leadManagement.get("/leadType", jwt.verifyJWT, isUserPresentAll, getLeadType);
-// leadManagement.get("/userPosition", jwt.verifyJWT, isUserPresentAll, getUserPosition);
-// leadManagement.get("/userRole", jwt.verifyJWT, isUserPresentAll, getUserRole);
 
 leadManagement.post("/createLead", jwt.verifyJWT, isUserPresentAll, createLead);
 leadManagement.get("/leadForUser", jwt.verifyJWT, isUserPresentAll, getAllLeadForUser);
