@@ -33,7 +33,7 @@ exports.registerUser = async (req, res) => {
         if (!employees) {
             return res.status(400).send({
                 success: false,
-                message: "Employees with this employees code is not present!"
+                message: "Employee with this employees code is not present!"
             });
         }
         const user = await UserInformation.findOne({
@@ -61,38 +61,22 @@ exports.registerUser = async (req, res) => {
                 data: checkSoftDelete
             });
         }
-        // // generate user code
-        // let code;
-        // const isUserCode = await UserInformation.findAll({
-        //     order: [
-        //         ['createdAt', 'ASC']
-        //     ]
-        // });
-        // if (isUserCode.length == 0) {
-        //     code = "USER" + 1000;
-        // } else {
-        //     let lastUserCode = isUserCode[isUserCode.length - 1];
-        //     let lastDigits = lastUserCode.userCode.substring(4);
-        //     let incrementedDigits = parseInt(lastDigits, 10) + 1;
-        //     code = "USER" + incrementedDigits;
-        //     //  console.log(code);
-        // }
         // Creating User Information
         await UserInformation.create({
             name: employees.name,
             email: employees.email,
             phoneNumber: employees.phoneNumber,
-            adminInformationId: req.user.id,
+            createrCode: req.user.code,
             userCode: req.body.employeesCode
         });
         // message to user
-        twilioSMS.messages
-            .create({
-                body: 'You are register as a user. login with same mobile number.',
-                from: PRAKHAR_TWILIO_PHONE_NUMBER,
-                statusCallback: 'http://postb.in/1234abcd',
-                to: `+91${employees.phoneNumber}`
-            })
+        // twilioSMS.messages
+        //     .create({
+        //         body: 'You are register as a user. login with same mobile number.',
+        //         from: PRAKHAR_TWILIO_PHONE_NUMBER,
+        //         statusCallback: 'http://postb.in/1234abcd',
+        //         to: `+91${employees.phoneNumber}`
+        //     })
         res.status(200).send({
             success: true,
             message: "User Created successfully!"
@@ -127,7 +111,6 @@ exports.login = async (req, res) => {
                 message: "User not found! First register your self!"
             });
         }
-        console.log("hiiiiiiiii")
         // Sending OTP to mobile number
         const countryCode = "+91";
         await twilio.verify.v2
@@ -139,7 +122,8 @@ exports.login = async (req, res) => {
             });
         res.status(200).send({
             success: true,
-            message: `OTP sent to User's Contact number! vallid till 2 min!`
+            message: `OTP sent to User's Contact number! vallid till 2 min!`,
+            data: { phoneNumber: phoneNumber }
         });
     } catch (err) {
         res.status(500).send({
@@ -184,7 +168,7 @@ exports.verifyLoginOtp = async (req, res) => {
             const data = {
                 id: user.id,
                 email: user.email,
-                userCode: user.userCode
+                code: user.userCode
             }
             const authToken = jwt.sign(
                 data,
@@ -216,7 +200,7 @@ exports.userInformation = async (req, res) => {
         const user = await UserInformation.findOne({
             where: {
                 [Op.and]: [
-                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.userCode }
+                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.code }
                 ]
             }
         });
@@ -246,6 +230,48 @@ exports.users = async (req, res) => {
             message: "Users Information fetched successfully!",
             data: users
         });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.deleteUser = async (req, res) => {
+    try {
+        await UserInformation.destroy({
+            where: {
+                userCode: req.params.userCode
+            },
+            // force: true // If you really want a hard-deletion and your model is paranoid, you can force it using the force: true option
+
+        });
+        res.status(200).send({
+            success: true,
+            message: "User Information deleted successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.restoreUser = async (req, res) => {
+    try {
+        await UserInformation.restore({
+            where: {
+                userCode: req.params.userCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "User Information restored successfully!"
+        });
+
     } catch (err) {
         res.status(500).send({
             success: false,

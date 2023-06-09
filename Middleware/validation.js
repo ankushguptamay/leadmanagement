@@ -72,3 +72,11 @@ exports.employeeRegistration = (data) => {
     });
     return schema.validate(data);
 }
+
+exports.assignLeadToUser = (data) => {
+    const schema = joi.object().keys({
+        leadProfileCode: joi.array().required(),
+        userInformationCode: joi.array().required(),
+    });
+    return schema.validate(data);
+}

@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    const AdminInformation = sequelize.define("adminInformation", {
+    const PreviousUpdateRecordUser = sequelize.define("previousUpdateRecordUser", {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true
         },
         name: {
             type: DataTypes.STRING,
@@ -18,18 +19,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
-        password:{
+        updaterCode: {
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        createrCode: {
             type: DataTypes.STRING,
             allowNull: false
-        },
-        adminCode:{
-            type:DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false,
-            unique: true
         }
-    }, {
-        paranoid:true
     })
-    return AdminInformation;
+    return PreviousUpdateRecordUser;
 }

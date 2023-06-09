@@ -3,6 +3,7 @@ const { Op, Sequelize } = require("sequelize");
 const { createLeadValidation } = require("../../Middleware/validation");
 const LeadProfile = db.leadProfile;
 const UserInformation = db.userInformation;
+const PreviousUpdateRecordLead = db.previousUpdateRecordLead;
 
 exports.createLead = async (req, res) => {
     try {
@@ -32,13 +33,13 @@ exports.createLead = async (req, res) => {
             code = "LEAD" + incrementedDigits;
             //  console.log(code);
         }
-        let createrId;
+        let createrCode;
         if (req.user) {
-            createrId = req.user.id;
+            createrCode= req.user.code;
         }
         await LeadProfile.create({
             ...req.body,
-            createrId: createrId,
+            createrCode: createrCode,
             leadCode: code
         });
         res.status(200).send({
@@ -92,14 +93,14 @@ exports.getAllLeadForUser = async (req, res) => {
         const lead = await UserInformation.findOne({
             where: {
                 [Op.and]: [
-                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.userCode }
+                    { id: req.user.id }, { email: req.user.email }, { userCode: req.user.code }
                 ]
             },
             include: [{
                 model: LeadProfile,
                 as: "leads",
                 order: [
-                    ['createdAt', 'ASC']
+                    ['lead_To_User.createdAt', 'ASC']
                 ],
                 // attributes: ['id', 'name', 'phoneNumber'],
             }]
@@ -117,49 +118,93 @@ exports.getAllLeadForUser = async (req, res) => {
     }
 }
 
-exports.updateLeadProfile = async (req, res) => {
+// exports.updateLeadProfile = async (req, res) => {
+//     try {
+//         const lead = await LeadProfile.findOne({
+//             where:  { leadCode: req.params.leadCode }
+//         })
+//         if(!lead){
+//             return res.status(400).send({
+//                 success: false,
+//                 message: "Lead Profile not found!"
+//             });
+//         }
+//         // save record in periv
+//         // await lead.destroy();
+//         const{name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city, country,state, website, email, phoneNumber,whatsAppNumber}=req.body;
+//         console.log(req.params.leadCode);
+//         await LeadProfile.create({
+//             name: name,
+//             gender: gender,
+//             jobTitle: jobTitle,
+//             salutation: salutation,
+//             leadOwner: leadOwner,
+//             source: source,
+//             status: status,
+//             leadType: leadType,
+//             requestType: requestType,
+//             city: city,
+//             country: country,
+//             state: state,
+//             website: website,
+//             email:email,
+//             phoneNumber: phoneNumber,
+//             whatsAppNumber: whatsAppNumber,
+//             leadCode: req.params.leadCode,
+//             createrId: req.user.id
+//         })
+//         res.status(200).send({
+//             success: true,
+//             message: "Lead Profile updated successfully!",
+//             data: lead
+//         });
+//     } catch (err) {
+//         res.status(500).send({
+//             success: false,
+//             message: err
+//         });
+//     }
+// }
+
+
+exports.deleteLead = async (req, res) => {
     try {
-        const lead = await LeadProfile.findOne({
-            where:  { leadCode: req.params.leadCode }
-        })
-        if(!lead){
-            return res.status(400).send({
-                success: false,
-                message: "Lead Profile not found!"
-            });
-        }
-        // await lead.destroy();
-        const{name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city, country,state, website, email, phoneNumber,whatsAppNumber}=req.body;
-        console.log(req.params.leadCode);
-        await LeadProfile.create({
-            name: name,
-            gender: gender,
-            jobTitle: jobTitle,
-            salutation: salutation,
-            leadOwner: leadOwner,
-            source: source,
-            status: status,
-            leadType: leadType,
-            requestType: requestType,
-            city: city,
-            country: country,
-            state: state,
-            website: website,
-            email:email,
-            phoneNumber: phoneNumber,
-            whatsAppNumber: whatsAppNumber,
-            leadCode: req.params.leadCode,
-            createrId: req.user.id
-        })
+        await LeadProfile.destroy({
+            where: {
+                leadCode: req.params.leadCode
+            },
+            // force: true // If you really want a hard-deletion and your model is paranoid, you can force it using the force: true option
+
+        });
         res.status(200).send({
             success: true,
-            message: "Lead Profile updated successfully!",
-            data: lead
+            message: "Lead Profile deleted successfully!"
         });
+
     } catch (err) {
         res.status(500).send({
             success: false,
-            message: err
+            message: err.message
+        });
+    }
+}
+
+exports.restoreLead = async (req, res) => {
+    try {
+        await LeadProfile.restore({
+            where: {
+                leadCode: req.params.leadCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Lead Profile restored successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
         });
     }
 }

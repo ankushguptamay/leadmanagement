@@ -1,8 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
-    const LeadProfile = sequelize.define("leadProfile", {
+    const PreviousUpdateRecordLead = sequelize.define("previousUpdateRecordLead", {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true
         },
         name: {
             type: DataTypes.STRING,
@@ -18,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         leadOwner: {
-            type: DataTypes.STRING // creater name
+            type: DataTypes.STRING
         },
         source: {
             type: DataTypes.STRING
@@ -53,11 +54,6 @@ module.exports = (sequelize, DataTypes) => {
         whatsAppNumber: {
             type: DataTypes.STRING
         },
-        leadCode: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-            allowNull: false
-        },
         createrCode: {
             type: DataTypes.STRING,
             defaultValue: null
@@ -66,8 +62,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: null
         },
-    }, {
-        paranoid:true
     })
-    return LeadProfile;
+    return PreviousUpdateRecordLead;
 }

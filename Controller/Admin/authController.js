@@ -25,15 +25,37 @@ exports.registerAdmin = async (req, res) => {
                 message: "Admin already present!"
             });
         }
+        // generate employee code
+        let code;
+        const isAdminCode = await AdminInformation.findAll({
+            paranoid: false,
+            order: [
+                ['createdAt', 'ASC']
+            ],
+            // attributes: [
+            //     [Sequelize.fn('DISTINCT', Sequelize.col('employeesCode')) ,'employeesCode']
+            // ]
+        });
+        if (isAdminCode.length == 0) {
+            code = "ADMIN" + 1000;
+        } else {
+            let lastAdminCode = isAdminCode[isAdminCode.length - 1];
+            let lastDigits = lastAdminCode.adminCode.substring(5);
+            let incrementedDigits = parseInt(lastDigits, 10) + 1;
+            code = "ADMIN" + incrementedDigits;
+            //  console.log(code);
+        }
         const salt = await bcrypt.genSalt(SALT);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
         const admin = await AdminInformation.create({
             ...req.body,
             password: hashedPassword,
+            adminCode: code
         });
         const data = {
             id: admin.id,
-            email: req.body.email
+            email: req.body.email,
+            adminCode: admin.adminCode
         }
         const authToken = jwt.sign(
             data,
@@ -83,7 +105,8 @@ exports.loginAdmin = async (req, res) => {
         }
         const data = {
             id: admin.id,
-            email: req.body.email
+            email: req.body.email,
+            code: admin.adminCode
         }
         const authToken = jwt.sign(
             data,

@@ -71,7 +71,7 @@ exports.registerEmployee = async (req, res) => {
         // Creating Employee Information
         await EmployeesInformation.create({
             ...req.body,
-            adminInformationId: req.user.id,
+            createrCode: req.user.code,
             employeesCode: code
         });
         res.status(200).send({
@@ -154,7 +154,6 @@ exports.searchEmployees = async (req, res) => {
     }
 }
 
-// search employee for create user
 exports.deleteEmployees = async (req, res) => {
     try {
         await EmployeesInformation.destroy({
@@ -167,6 +166,26 @@ exports.deleteEmployees = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Employees Information deleted successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.restoreEmployee = async (req, res) => {
+    try {
+        await EmployeesInformation.restore({
+            where: {
+                employeesCode: req.params.employeesCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Employee Information restored successfully!"
         });
 
     } catch (err) {
