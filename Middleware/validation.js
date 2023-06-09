@@ -76,7 +76,15 @@ exports.employeeRegistration = (data) => {
 exports.assignLeadToUser = (data) => {
     const schema = joi.object().keys({
         leadProfileCode: joi.array().required(),
-        userInformationCode: joi.array().required(),
+        userInformationCode: joi.string().required(),
+    });
+    return schema.validate(data);
+}
+
+exports.rollBackAssign = (data) => {
+    const schema = joi.object().keys({
+        leadProfileCode: joi.string().required(),
+        userInformationCode: joi.string().required(),
     });
     return schema.validate(data);
 }

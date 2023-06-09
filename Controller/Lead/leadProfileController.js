@@ -35,7 +35,7 @@ exports.createLead = async (req, res) => {
         }
         let createrCode;
         if (req.user) {
-            createrCode= req.user.code;
+            createrCode = req.user.code;
         }
         await LeadProfile.create({
             ...req.body,
@@ -118,53 +118,75 @@ exports.getAllLeadForUser = async (req, res) => {
     }
 }
 
-// exports.updateLeadProfile = async (req, res) => {
-//     try {
-//         const lead = await LeadProfile.findOne({
-//             where:  { leadCode: req.params.leadCode }
-//         })
-//         if(!lead){
-//             return res.status(400).send({
-//                 success: false,
-//                 message: "Lead Profile not found!"
-//             });
-//         }
-//         // save record in periv
-//         // await lead.destroy();
-//         const{name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city, country,state, website, email, phoneNumber,whatsAppNumber}=req.body;
-//         console.log(req.params.leadCode);
-//         await LeadProfile.create({
-//             name: name,
-//             gender: gender,
-//             jobTitle: jobTitle,
-//             salutation: salutation,
-//             leadOwner: leadOwner,
-//             source: source,
-//             status: status,
-//             leadType: leadType,
-//             requestType: requestType,
-//             city: city,
-//             country: country,
-//             state: state,
-//             website: website,
-//             email:email,
-//             phoneNumber: phoneNumber,
-//             whatsAppNumber: whatsAppNumber,
-//             leadCode: req.params.leadCode,
-//             createrId: req.user.id
-//         })
-//         res.status(200).send({
-//             success: true,
-//             message: "Lead Profile updated successfully!",
-//             data: lead
-//         });
-//     } catch (err) {
-//         res.status(500).send({
-//             success: false,
-//             message: err
-//         });
-//     }
-// }
+exports.updateLeadProfile = async (req, res) => {
+    try {
+        const lead = await LeadProfile.findOne({
+            where: { leadCode: req.params.leadCode }
+        })
+        if (!lead) {
+            return res.status(400).send({
+                success: false,
+                message: "Lead Profile not found!"
+            });
+        }
+        // save record in previousUpdateRecordLead table
+        await PreviousUpdateRecordLead.create({
+            name: lead.name,
+            gender: lead.gender,
+            jobTitle: lead.jobTitle,
+            salutation: lead.salutation,
+            leadOwner: lead.leadOwner,
+            source: lead.source,
+            status: lead.status,
+            leadType: lead.leadType,
+            requestType: lead.requestType,
+            city: lead.city,
+            country: lead.country,
+            state: lead.state,
+            website: lead.website,
+            email: lead.email,
+            phoneNumber: lead.phoneNumber,
+            whatsAppNumber: lead.whatsAppNumber,
+            leadProfileCode: req.params.leadCode,
+            createrCode: lead.createrCode,
+            updaterCode: lead.updaterCode
+
+        })
+        const { name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city,
+            country, state, website, email, phoneNumber, whatsAppNumber } = req.body;
+        await lead.update({
+            ...lead,
+            name: name,
+            gender: gender,
+            jobTitle: jobTitle,
+            salutation: salutation,
+            leadOwner: leadOwner,
+            source: source,
+            status: status,
+            leadType: leadType,
+            requestType: requestType,
+            city: city,
+            country: country,
+            state: state,
+            website: website,
+            email: email,
+            phoneNumber: phoneNumber,
+            whatsAppNumber: whatsAppNumber,
+            updaterCode: req.user.code
+
+        })
+        res.status(200).send({
+            success: true,
+            message: "Lead Profile updated successfully!",
+            data: lead
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err
+        });
+    }
+}
 
 
 exports.deleteLead = async (req, res) => {

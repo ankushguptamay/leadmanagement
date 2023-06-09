@@ -2,7 +2,7 @@ const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
 const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead } = require('../Controller/Lead/leadProfileController');
 const { registerUser, users, deleteUser, restoreUser } = require('../Controller/User/userInformationCont');
-const { assignLeadToUser } = require('../Controller/Lead/assignLeadController');
+const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
 const leadManagement = express.Router();
 
@@ -22,11 +22,12 @@ leadManagement.post("/restoreUser/:userCode", jwt.verifyJWT, isAdminPresent, res
 
 leadManagement.post("/createLead", jwt.verifyJWT, isAdminPresent, createLead);
 leadManagement.get("/leadByStatus", jwt.verifyJWT, isAdminPresent, getAllLeadByStatus);
-// leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isAdminPresent, updateLeadProfile);
+leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isAdminPresent, updateLeadProfile);
 leadManagement.post("/restoreLead/:leadCode", jwt.verifyJWT, isAdminPresent, restoreLead);
 leadManagement.delete("/deleteLead/:leadCode", jwt.verifyJWT, isAdminPresent, deleteLead);
 
 leadManagement.post("/assignLeadToUser", jwt.verifyJWT, isAdminPresent, assignLeadToUser);
+leadManagement.post("/rollBackAssign", jwt.verifyJWT, isAdminPresent, rollBackAssign);
 
 leadManagement.post("/registerEmployee", jwt.verifyJWT, isAdminPresent, registerEmployee);
 leadManagement.get("/allEmployeesInformation", jwt.verifyJWT, isAdminPresent, allEmployeesInformation);
