@@ -3,6 +3,7 @@ const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Con
 const { createLead, getAllLeadByStatus, updateLeadProfile } = require('../Controller/Lead/leadProfileController');
 const { registerUser, users } = require('../Controller/User/userInformationCont');
 const { assignLeadToUser } = require('../Controller/Lead/assignLeadController');
+const { allEmployeesInformation, registerEmployee, deleteEmployees, searchEmployees } = require('../Controller/User/employeesController');
 const leadManagement = express.Router();
 
 // middleware
@@ -22,6 +23,11 @@ leadManagement.get("/leadByStatus", jwt.verifyJWT, isAdminPresent, getAllLeadByS
 leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isAdminPresent, updateLeadProfile);
 
 leadManagement.post("/assignLeadToUser", jwt.verifyJWT, isAdminPresent, assignLeadToUser);
+
+leadManagement.post("/registerEmployee", jwt.verifyJWT, isAdminPresent, registerEmployee);
+leadManagement.get("/allEmployeesInformation", jwt.verifyJWT, isAdminPresent, allEmployeesInformation);
+leadManagement.delete("/deleteEmployees/:employeesCode", jwt.verifyJWT, isAdminPresent, deleteEmployees);
+leadManagement.get("/searchEmployees", jwt.verifyJWT, isAdminPresent, searchEmployees);
 
 leadManagement.post("/createLeadFromOutSource", createLead); // social media
 

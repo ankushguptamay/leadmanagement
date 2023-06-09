@@ -29,10 +29,11 @@ exports.adminLogin = (data) => {
 
 exports.userRegistration = (data) => {
     const schema = joi.object().keys({
-        name: joi.string().min(3).max(30).required(),
-        email: joi.string().email().required().label('Email'),
-        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
-    }).options({ allowUnknown: true });
+        // name: joi.string().min(3).max(30).required(),
+        // email: joi.string().email().required().label('Email'),
+        // phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required(),
+        employeesCode: joi.string().required(),
+    });
     return schema.validate(data);
 }
 
@@ -56,7 +57,18 @@ exports.createLeadValidation = (data) => {
         name: joi.string().min(3).max(30).required(),
         // email: joi.string().email().required().label('Email'),
         phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required(),
-        source:joi.string().required()
+        source: joi.string().required()
     }).options({ allowUnknown: true });
+    return schema.validate(data);
+}
+
+exports.employeeRegistration = (data) => {
+    const schema = joi.object().keys({
+        name: joi.string().min(3).max(30).required(),
+        email: joi.string().email().required().label('Email'),
+        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required(),
+        address: joi.string().min(3).max(100).required(),
+        profile_position: joi.string().min(3).max(20).required()
+    });
     return schema.validate(data);
 }

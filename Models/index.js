@@ -26,9 +26,11 @@ db.leadProfile = require('./Lead/leadProfileModel.js')(sequelize, Sequelize);
 
 // User
 db.userInformation = require('./User/userInfoModel.js')(sequelize, Sequelize);
+db.employeesInformation = require('./User/epmloyeesInfoModel.js')(sequelize, Sequelize);
 
 // Admin Association
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'adminInformationId' });
+db.adminInformation.hasMany(db.employeesInformation, { foreignKey: 'adminInformationId' });
 
 db.leadProfile.belongsToMany(db.userInformation, { through: "lead_To_User", as: 'users' });
 db.userInformation.belongsToMany(db.leadProfile, { through: "lead_To_User",  as: "leads" });

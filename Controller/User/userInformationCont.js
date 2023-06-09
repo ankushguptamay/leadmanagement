@@ -3,9 +3,15 @@ const { userRegistration, userLogin, userLoginOTP } = require("../../Middleware/
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const UserInformation = db.userInformation;
-const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID, JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
+const EmployeesInformation = db.employeesInformation;
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID, JWT_SECRET_KEY, JWT_VALIDITY,
+    PRAKHAR_TWILIO_PHONE_NUMBER, PRAKHAR_TWILIO_AUTH_TOKEN, PRAKHAR_TWILIO_ACCOUNT_SID } = process.env;
 
 const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
+    lazyLoading: true
+});
+
+const twilioSMS = require("twilio")(PRAKHAR_TWILIO_ACCOUNT_SID, PRAKHAR_TWILIO_AUTH_TOKEN, {
     lazyLoading: true
 });
 
@@ -19,11 +25,20 @@ exports.registerUser = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
         // Checking is mobile number and Email allready present
+        const employees = await EmployeesInformation.findOne({
+            where: {
+                employeesCode: req.body.employeesCode
+            }
+        });
+        if (!employees) {
+            return res.status(400).send({
+                success: false,
+                message: "Employees with this employees code is not present!"
+            });
+        }
         const user = await UserInformation.findOne({
             where: {
-                [Op.or]: [
-                    { phoneNumber: req.body.phoneNumber }, { email: req.body.email }
-                ]
+                userCode: req.body.employeesCode
             }
         });
         if (user) {
@@ -32,28 +47,52 @@ exports.registerUser = async (req, res) => {
                 message: "User already registered!"
             });
         }
-        // generate user code
-        let code;
-        const isUserCode = await UserInformation.findAll({
-            order: [
-                ['createdAt', 'ASC']
-            ]
+        // check in deleted
+        const checkSoftDelete = await UserInformation.findOne({
+            where: {
+                userCode: req.body.employeesCode
+            },
+            paranoid: false
         });
-        if (isUserCode.length == 0) {
-            code = "USER" + 1000;
-        } else {
-            let lastUserCode = isUserCode[isUserCode.length - 1];
-            let lastDigits = lastUserCode.userCode.substring(4);
-            let incrementedDigits = parseInt(lastDigits, 10) + 1;
-            code = "USER" + incrementedDigits;
-            //  console.log(code);
+        if (checkSoftDelete) {
+            return res.status(400).send({
+                success: false,
+                message: "User already registered in soft delete! Restore it?",
+                data: checkSoftDelete
+            });
         }
+        // // generate user code
+        // let code;
+        // const isUserCode = await UserInformation.findAll({
+        //     order: [
+        //         ['createdAt', 'ASC']
+        //     ]
+        // });
+        // if (isUserCode.length == 0) {
+        //     code = "USER" + 1000;
+        // } else {
+        //     let lastUserCode = isUserCode[isUserCode.length - 1];
+        //     let lastDigits = lastUserCode.userCode.substring(4);
+        //     let incrementedDigits = parseInt(lastDigits, 10) + 1;
+        //     code = "USER" + incrementedDigits;
+        //     //  console.log(code);
+        // }
         // Creating User Information
         await UserInformation.create({
-            ...req.body,
+            name: employees.name,
+            email: employees.email,
+            phoneNumber: employees.phoneNumber,
             adminInformationId: req.user.id,
-            userCode: code
+            userCode: req.body.employeesCode
         });
+        // message to user
+        twilioSMS.messages
+            .create({
+                body: 'You are register as a user. login with same mobile number.',
+                from: PRAKHAR_TWILIO_PHONE_NUMBER,
+                statusCallback: 'http://postb.in/1234abcd',
+                to: `+91${employees.phoneNumber}`
+            })
         res.status(200).send({
             success: true,
             message: "User Created successfully!"

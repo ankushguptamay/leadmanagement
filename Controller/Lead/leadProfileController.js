@@ -1,5 +1,5 @@
 const db = require('../../Models');
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 const { createLeadValidation } = require("../../Middleware/validation");
 const LeadProfile = db.leadProfile;
 const UserInformation = db.userInformation;
@@ -15,9 +15,13 @@ exports.createLead = async (req, res) => {
         // generate lead code
         let code;
         const isLeadCode = await LeadProfile.findAll({
+            paranoid: false,
             order: [
                 ['createdAt', 'ASC']
-            ]
+            ],
+            // attributes: [
+            //     [Sequelize.fn('DISTINCT', Sequelize.col('leadCode')) ,'leadCode']
+            // ]
         });
         if (isLeadCode.length == 0) {
             code = "LEAD" + 1000;
@@ -59,13 +63,13 @@ exports.getAllLeadByStatus = async (req, res) => {
                     status: req.query.status
                 },
                 order: [
-                    ['createdAt', 'ASC']
+                    ['createdAt', 'DESC']
                 ]
             });
         } else {
             lead = await LeadProfile.findAll({
                 order: [
-                    ['createdAt', 'ASC']
+                    ['createdAt', 'DESC']
                 ]
             });
         }
@@ -124,8 +128,9 @@ exports.updateLeadProfile = async (req, res) => {
                 message: "Lead Profile not found!"
             });
         }
-        await lead.destroy();
+        // await lead.destroy();
         const{name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city, country,state, website, email, phoneNumber,whatsAppNumber}=req.body;
+        console.log(req.params.leadCode);
         await LeadProfile.create({
             name: name,
             gender: gender,
@@ -154,7 +159,7 @@ exports.updateLeadProfile = async (req, res) => {
     } catch (err) {
         res.status(500).send({
             success: false,
-            message: err.message
+            message: err
         });
     }
 }
