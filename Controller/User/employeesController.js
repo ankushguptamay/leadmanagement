@@ -110,42 +110,21 @@ exports.allEmployeesInformation = async (req, res) => {
 // search employee for create user
 exports.searchEmployees = async (req, res) => {
     try {
-        const { name, email, phoneNumber, employeesCode } = req.query;
-        const query = [];
-        if (name) {
-            const obj = { name: name };
-            query.push(obj);
-        } if (email) {
-            const obj = { email: email };
-            query.push(obj);
-        } if (phoneNumber) {
-            const obj = { phoneNumber: phoneNumber };
-            query.push(obj);
-        } if (employeesCode) {
-            const obj = { employeesCode: employeesCode };
-            query.push(obj)
-        }
-        if (query.length > 0) {
-            const employee = await EmployeesInformation.findAll({
-                where: {
-                    [Op.and]: query
-                },
-                order: [
-                    ['createdAt', 'DESC'],
-                    ["name", "ASC"]
-                ]
-            });
-            res.status(200).send({
-                success: true,
-                message: "Employees Information fetched successfully!",
-                data: employee
-            });
-        } else {
-            res.status(400).send({
-                success: false,
-                message: "Enter a query!"
-            });
-        }
+        const { query } = req.query;
+        const employee = await EmployeesInformation.findAll({
+            where: {
+                [Op.or]: [{ name: query }, { email: query }, { phoneNumber: query }, { employeesCode: query }]
+            },
+            order: [
+                ['createdAt', 'DESC'],
+                ["name", "ASC"]
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: "Employees Information fetched successfully!",
+            data: employee
+        })
     } catch (err) {
         res.status(500).send({
             success: false,
