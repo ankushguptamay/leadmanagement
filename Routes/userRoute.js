@@ -13,6 +13,6 @@ leadManagement.get("/userInformation", jwt.verifyJWT, isUserPresentAll, userInfo
 
 leadManagement.post("/createLead", jwt.verifyJWT, isUserPresentAll, createLead);
 leadManagement.get("/leadForUser", jwt.verifyJWT, isUserPresentAll, getAllLeadForUser);
-// leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isUserPresentAll, updateLeadProfile);
+leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isUserPresentAll, updateLeadProfile);
 
 module.exports = leadManagement;

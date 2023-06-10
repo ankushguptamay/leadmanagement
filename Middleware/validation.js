@@ -88,3 +88,38 @@ exports.rollBackAssign = (data) => {
     });
     return schema.validate(data);
 }
+
+exports.bookingSlote = (data) => {
+    const schema = joi.object().keys({
+        date: joi.string().required(),
+        time: joi.string().required(),
+    });
+    return schema.validate(data);
+}
+
+exports.addAdminCourse = (data) => {
+    const schema = joi.object().keys({
+        category:joi.string().required(),
+        coursePrice:joi.string().required(),
+        heading:joi.string().required(),
+        description:joi.string().required(),
+        level:joi.string().required(),
+        language:joi.string().required(),
+        courseName:joi.string().required(),
+        lesson:joi.string().required(),
+        duration:joi.string().required(),
+        subjects:joi.string().required()
+    });
+    return schema.validate(data);
+}
+
+exports.addAdminCourseContent = (data) => {
+    const schema = joi.object().keys({
+        course:joi.string().required(),
+        subject:joi.string().required(),
+        videoType:joi.string().required(),
+        VideoLink:joi.string().required(),
+        VideoTitle:joi.string().required()
+    });
+    return schema.validate(data);
+}

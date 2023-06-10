@@ -20,6 +20,10 @@ db.sequelize = sequelize;
 // Admin
 db.adminInformation = require('./Admin/adminInfoModel.js')(sequelize, Sequelize);
 db.lead_To_User = require('./Admin/assignLeadToUserModel.js')(sequelize, Sequelize);
+db.adminCourseContent = require('./Admin/courseContentModel.js')(sequelize, Sequelize);
+db.adminCourse = require('./Admin/courseModel.js')(sequelize, Sequelize);
+db.appointmentSlote = require('./Admin/appointmentSloteModel.js')(sequelize, Sequelize);
+
 
 // Lead
 db.leadProfile = require('./Lead/leadProfileModel.js')(sequelize, Sequelize);
@@ -34,6 +38,17 @@ db.previousUpdateRecordUser = require('./User/previousUpdateRecordUserModel.js')
 // Association
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'createrCode' });
 db.adminInformation.hasMany(db.employeesInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.adminCourse, { foreignKey: 'createrCode' });
+db.adminCourse.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' });
+
+db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent' });
+db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'course' });
+
+db.adminInformation.hasMany(db.appointmentSlote, { foreignKey: 'createrCode' });
+db.appointmentSlote.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
 db.leadProfile.belongsToMany(db.userInformation, { through: "lead_To_User", as: 'users' });
 db.userInformation.belongsToMany(db.leadProfile, { through: "lead_To_User", as: "leads" });

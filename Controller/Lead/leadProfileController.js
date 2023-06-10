@@ -230,3 +230,23 @@ exports.restoreLead = async (req, res) => {
         });
     }
 }
+
+exports.deletePreviousLead = async (req, res) => {
+    try {
+        await PreviousUpdateRecordLead.destroy({
+            where: {
+                leadProfileCode: req.params.leadProfileCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Previous Lead Profile deleted successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
