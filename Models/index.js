@@ -45,7 +45,7 @@ db.adminCourse.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' });
 
 db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent' });
-db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'course' });
+db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
 
 db.adminInformation.hasMany(db.appointmentSlote, { foreignKey: 'createrCode' });
 db.appointmentSlote.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
