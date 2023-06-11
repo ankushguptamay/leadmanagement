@@ -177,8 +177,7 @@ exports.updateLeadProfile = async (req, res) => {
         })
         res.status(200).send({
             success: true,
-            message: "Lead Profile updated successfully!",
-            data: lead
+            message: "Lead Profile updated successfully!"
         });
     } catch (err) {
         res.status(500).send({

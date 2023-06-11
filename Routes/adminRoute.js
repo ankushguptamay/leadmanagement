@@ -6,6 +6,8 @@ const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignL
 const { allEmployeesInformation, registerEmployee, deleteEmployees, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
 const { addCourse, getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
 const { addCourseContent } = require('../Controller/Admin/courseContentController');
+const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote } = require('../Controller/Admin/appointmentSloteController');
+const { bookPatientAppointment } = require('../Controller/Patient/patientAppointment');
 const leadManagement = express.Router();
 
 // middleware
@@ -43,9 +45,15 @@ leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.sin
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
 leadManagement.get("/courseById/:id", jwt.verifyJWT, isAdminPresent, getCourseById);
 
+leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
+leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);
+leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote);// as notification
+
 leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
 
 leadManagement.get("/searchEmployees", jwt.verifyJWT, isAdminPresent, searchEmployees);
+
+leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 
 leadManagement.post("/createLeadFromOutSource", createLead); // social media
 

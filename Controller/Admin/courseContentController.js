@@ -11,7 +11,7 @@ exports.addCourseContent= async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        if (req.files.length <= 0) {
+        if (!req.files) {
             return res.status(400).send({
                 success: false,
                 message: `You must select at least 1 File.`
@@ -31,7 +31,7 @@ exports.addCourseContent= async (req, res) => {
         });
         res.status(200).send({
             success: true,
-            message: "Course Created successfully!"
+            message: "Course Content Created successfully!"
         });
     } catch (err) {
         res.status(500).send({

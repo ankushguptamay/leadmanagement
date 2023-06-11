@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING
         },
         contentNotes:{
-            type:DataTypes.TEXT
+            type:DataTypes.JSON
         }
     })
     return AdminCourseContent;

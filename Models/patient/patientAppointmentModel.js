@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const AppointmentSlote = sequelize.define("appointmentStole", {
+    const PatientAppointment = sequelize.define("patientAppointment", {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
@@ -16,8 +16,25 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.STRING,
+            allowNull: false
+        },
+        fullName:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        age:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        gender:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        patientProblem:{
+            type: DataTypes.TEXT,
             allowNull: true
         }
+        
     })
-    return AppointmentSlote;
+    return PatientAppointment;
 }

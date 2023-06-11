@@ -123,3 +123,13 @@ exports.addAdminCourseContent = (data) => {
     });
     return schema.validate(data);
 }
+
+exports.addPatientAppointment = (data) => {
+    const schema = joi.object().keys({
+        fullName:joi.string().min(3).max(30).required(),
+        age:joi.string().required(),
+        gender:joi.string().required(),
+        patientProblem:joi.string().min(20).max(200).optional()
+    });
+    return schema.validate(data);
+}
