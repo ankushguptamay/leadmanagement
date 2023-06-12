@@ -12,15 +12,19 @@ exports.addAppointmentSlote = async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        const { date, time } = req.body;
-        await AppointmentSlote.create({
-            createrCode: req.user.code,
-            date: date,
-            time: time
-        });
+        const { date, time, name, phoneNumber } = req.body;
+        for (let i = 0; i < time.length; i++) {
+            await AppointmentSlote.create({
+                createrCode: req.user.code,
+                date: date,
+                time: time[0],
+                name: name,
+                phoneNumber: phoneNumber
+            });
+        }
         res.status(200).send({
             success: true,
-            message: "Appointment Slote Created successfully!"
+            message: `${time.length} Appointment Slote Created successfully!`
         });
     } catch (err) {
         res.status(500).send({

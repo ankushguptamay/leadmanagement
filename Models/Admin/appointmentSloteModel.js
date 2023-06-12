@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         status: {
             type: DataTypes.STRING,
             allowNull: true
+        },
+        name: {
+            type: DataTypes.STRING
+        },
+        phoneNumber: {
+            type: DataTypes.STRING
         }
     })
     return AppointmentSlote;
