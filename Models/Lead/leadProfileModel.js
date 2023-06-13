@@ -53,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
         whatsAppNumber: {
             type: DataTypes.STRING
         },
+        assigned: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         leadCode: {
             type: DataTypes.STRING,
             primaryKey: true,
@@ -65,9 +69,9 @@ module.exports = (sequelize, DataTypes) => {
         updaterCode: {
             type: DataTypes.STRING,
             defaultValue: null
-        },
+        }
     }, {
-        paranoid:true
+        paranoid: true
     })
     return LeadProfile;
 }

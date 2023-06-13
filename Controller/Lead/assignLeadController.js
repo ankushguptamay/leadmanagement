@@ -2,6 +2,7 @@ const db = require('../../Models');
 const { Op } = require("sequelize");
 const { assignLeadToUser, rollBackAssign } = require("../../Middleware/validation");
 const Lead_To_User = db.lead_To_User;
+const LeadProfile = db.leadProfile;
 
 exports.assignLeadToUser = async (req, res) => {
     try {
@@ -28,6 +29,14 @@ exports.assignLeadToUser = async (req, res) => {
                     userInformationUserCode: userCode,
                     assignerCode: req.user.code
                 });
+                await leadCode.update(
+                    { assigned: true },
+                    {
+                        where: {
+                            leadCode: leadCode[i]
+                        }
+                    }
+                )
                 count = count + 1;
             }
 

@@ -17,7 +17,7 @@ exports.addAppointmentSlote = async (req, res) => {
             await AppointmentSlote.create({
                 createrCode: req.user.code,
                 date: date,
-                time: time[0],
+                time: time[i],
                 name: name,
                 phoneNumber: phoneNumber
             });

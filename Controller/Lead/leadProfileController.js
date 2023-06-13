@@ -61,7 +61,7 @@ exports.getAllLeadByStatus = async (req, res) => {
         if (req.query.status) {
             lead = await LeadProfile.findAll({
                 where: {
-                    status: req.query.status
+                    [Op.and]: [{ status: req.query.status }, { assigned: true }]
                 },
                 order: [
                     ['createdAt', 'DESC']
@@ -69,6 +69,9 @@ exports.getAllLeadByStatus = async (req, res) => {
             });
         } else {
             lead = await LeadProfile.findAll({
+                where: {
+                    assigned: false
+                },
                 order: [
                     ['createdAt', 'DESC']
                 ]
@@ -149,7 +152,8 @@ exports.updateLeadProfile = async (req, res) => {
             whatsAppNumber: lead.whatsAppNumber,
             leadProfileCode: req.params.leadCode,
             createrCode: lead.createrCode,
-            updaterCode: lead.updaterCode
+            updaterCode: lead.updaterCode,
+            assigned: lead.assigned
 
         })
         const { name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city,

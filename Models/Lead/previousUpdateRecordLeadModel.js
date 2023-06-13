@@ -62,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: null
         },
+        assigned: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        }
     })
     return PreviousUpdateRecordLead;
 }
