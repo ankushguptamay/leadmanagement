@@ -29,7 +29,7 @@ exports.assignLeadToUser = async (req, res) => {
                     userInformationUserCode: userCode,
                     assignerCode: req.user.code
                 });
-                await leadCode.update(
+                await LeadProfile.update(
                     { assigned: true },
                     {
                         where: {

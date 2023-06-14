@@ -90,6 +90,27 @@ exports.getAllLeadByStatus = async (req, res) => {
     }
 }
 
+// find lead by leadCode for admin/User
+exports.getLeadByLeadCode = async (req, res) => {
+    try {
+        const lead = await LeadProfile.findOne({
+            where: {
+                leadCode: req.params.leadCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Lead Profile fetched successfully!",
+            data: lead
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
 // find all lead for user 
 exports.getAllLeadForUser = async (req, res) => {
     try {

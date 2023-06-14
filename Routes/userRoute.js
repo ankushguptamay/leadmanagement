@@ -1,6 +1,6 @@
 const express = require('express');
 const { login, verifyLoginOtp, userInformation } = require('../Controller/User/userInformationCont');
-const { createLead, getAllLeadForUser, updateLeadProfile } = require('../Controller/Lead/leadProfileController');
+const { createLead, getAllLeadForUser, updateLeadProfile, getLeadByLeadCode } = require('../Controller/Lead/leadProfileController');
 const leadManagement = express.Router();
 
 // middleware
@@ -13,6 +13,7 @@ leadManagement.get("/userInformation", jwt.verifyJWT, isUserPresentAll, userInfo
 
 leadManagement.post("/createLead", jwt.verifyJWT, isUserPresentAll, createLead);
 leadManagement.get("/leadForUser", jwt.verifyJWT, isUserPresentAll, getAllLeadForUser);
+leadManagement.get("/getLeadByLeadCode/:leadCode", jwt.verifyJWT, isUserPresentAll, getLeadByLeadCode);
 leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isUserPresentAll, updateLeadProfile);
 
 module.exports = leadManagement;

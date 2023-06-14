@@ -55,7 +55,7 @@ exports.registerAdmin = async (req, res) => {
         const data = {
             id: admin.id,
             email: req.body.email,
-            adminCode: admin.adminCode
+            code: admin.adminCode
         }
         const authToken = jwt.sign(
             data,
