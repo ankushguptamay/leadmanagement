@@ -70,13 +70,13 @@ exports.registerUser = async (req, res) => {
             userCode: req.body.employeesCode
         });
         // message to user
-        twilioSMS.messages
-            .create({
-                body: 'You are register as a user. login with same mobile number.',
-                from: PRAKHAR_TWILIO_PHONE_NUMBER,
-                statusCallback: 'http://postb.in/1234abcd',
-                to: `+91${employees.phoneNumber}`
-            })
+        // twilioSMS.messages
+        //     .create({
+        //         body: 'You are register as a user. login with same mobile number.',
+        //         from: PRAKHAR_TWILIO_PHONE_NUMBER,
+        //         statusCallback: 'http://postb.in/1234abcd',
+        //         to: `+91${employees.phoneNumber}`
+        //     })
         res.status(200).send({
             success: true,
             message: "User Created successfully!"
