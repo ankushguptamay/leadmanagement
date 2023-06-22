@@ -1,7 +1,7 @@
 const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
 const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead, deletePreviousLead, getLeadByLeadCode } = require('../Controller/Lead/leadProfileController');
-const { registerUser, users, deleteUser, restoreUser } = require('../Controller/User/userInformationCont');
+const { registerUser, users, deleteUser, restoreUser, searchUser } = require('../Controller/User/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
 const { addCourse, getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
@@ -25,6 +25,7 @@ leadManagement.post("/registerUser", jwt.verifyJWT, isAdminPresent, registerUser
 leadManagement.get("/users", jwt.verifyJWT, isAdminPresent, users);
 leadManagement.delete("/deleteUser/:userCode", jwt.verifyJWT, isAdminPresent, deleteUser);
 leadManagement.post("/restoreUser/:userCode", jwt.verifyJWT, isAdminPresent, restoreUser);
+leadManagement.get("/searchUser", jwt.verifyJWT, isAdminPresent, searchUser);
 
 leadManagement.post("/createLead", jwt.verifyJWT, isAdminPresent, createLead);
 leadManagement.get("/leadByStatus", jwt.verifyJWT, isAdminPresent, getAllLeadByStatus);

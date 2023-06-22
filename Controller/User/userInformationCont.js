@@ -279,3 +279,28 @@ exports.restoreUser = async (req, res) => {
         });
     }
 }
+
+exports.searchUser = async (req, res) => {
+    try {
+        const { query } = req.query;
+        const user = await UserInformation.findAll({
+            where: {
+                [Op.or]: [{ name: query }, { email: query }, { phoneNumber: query }, { userCode: query }]
+            },
+            order: [
+                ['createdAt', 'DESC'],
+                ["name", "ASC"]
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: "User Information fetched successfully!",
+            data: user
+        })
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
