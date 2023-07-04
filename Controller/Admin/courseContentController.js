@@ -3,7 +3,7 @@ const { Op } = require("sequelize");
 const { addAdminCourseContent } = require("../../Middleware/validation");
 const AdminCourseContent = db.adminCourseContent;
 
-exports.addCourseContent= async (req, res) => {
+exports.addCourseContent = async (req, res) => {
     try {
         // Validate body
         const { error } = addAdminCourseContent(req.body);
@@ -32,6 +32,28 @@ exports.addCourseContent= async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Course Content Created successfully!"
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+exports.getCourseContentByCourseId = async (req, res) => {
+    try {
+        const courseId = req.params.courseId;
+        const content = await AdminCourseContent.findAll({
+            where: { courseId: courseId },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: "Course content fetched successfully!",
+            data: content
         });
     } catch (err) {
         res.status(500).send({

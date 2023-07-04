@@ -120,8 +120,8 @@ exports.addAdminCourseContent = (data) => {
         course: joi.string().required(),
         subject: joi.string().required(),
         videoType: joi.string().required(),
-        VideoLink: joi.string().required(),
-        VideoTitle: joi.string().required()
+        videoLink: joi.string().required(),
+        videoTitle: joi.string().required()
     });
     return schema.validate(data);
 }

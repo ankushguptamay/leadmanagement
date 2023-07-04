@@ -4,8 +4,8 @@ const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLe
 const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/User/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
-const { addCourse, getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
-const { addCourseContent } = require('../Controller/Admin/courseContentController');
+const { addCourse, getAllCourse } = require('../Controller/Admin/courseController');
+const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote } = require('../Controller/Admin/appointmentSloteController');
 const { bookPatientAppointment } = require('../Controller/Patient/patientAppointment');
 const leadManagement = express.Router();
@@ -48,13 +48,13 @@ leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPre
 
 leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), addCourse);
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
-leadManagement.get("/courseById/:id", jwt.verifyJWT, isAdminPresent, getCourseById);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);
 leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote);// as notification
 
 leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
+leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);
 
 leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 
