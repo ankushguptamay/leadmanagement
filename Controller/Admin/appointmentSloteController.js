@@ -37,7 +37,11 @@ exports.addAppointmentSlote = async (req, res) => {
 exports.getAppointmentSloteByDate = async (req, res) => {
     try {
         const slote = await AppointmentSlote.findAll({
-            where: { date: req.query.date }
+            where: { date: req.query.date },
+            include: [{
+                model: PatientAppointment,
+                as: 'patientDetail'
+            }]
         });
         res.status(200).send({
             success: true,
@@ -53,21 +57,40 @@ exports.getAppointmentSloteByDate = async (req, res) => {
 };
 
 // work as notification to admin
-exports.bookedSlote = async (req, res) => {
+// exports.bookedSlote = async (req, res) => {
+//     try {
+//         const slote = await AppointmentSlote.findAll({
+//             where: { status: "Booked" },
+//             include: [{
+//                 model: PatientAppointment,
+//                 as: 'patientDetail',
+//                 order: [
+//                     ['createdAt', 'DESC']
+//                 ],
+//             }]
+//         });
+//         res.status(200).send({
+//             success: true,
+//             message: "Booked slot fetched successfully!",
+//             data: slote
+//         });
+//     } catch (err) {
+//         res.status(500).send({
+//             success: false,
+//             message: err.message
+//         });
+//     }
+// };
+
+exports.getAppointmentSloteByDateForPatient = async (req, res) => {
     try {
+        const date = req.query.date;
         const slote = await AppointmentSlote.findAll({
-            where: { status: "Booked" },
-            include: [{
-                model: PatientAppointment,
-                as: 'patientDetail',
-                order: [
-                    ['createdAt', 'DESC']
-                ],
-            }]
+            where: { date: date }
         });
         res.status(200).send({
             success: true,
-            message: "Booked slot fetched successfully!",
+            message: "Appointment Slote fetched by date successfully!",
             data: slote
         });
     } catch (err) {

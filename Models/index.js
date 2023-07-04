@@ -23,6 +23,11 @@ db.lead_To_User = require('./Admin/assignLeadToUserModel.js')(sequelize, Sequeli
 db.adminCourseContent = require('./Admin/courseContentModel.js')(sequelize, Sequelize);
 db.adminCourse = require('./Admin/courseModel.js')(sequelize, Sequelize);
 db.appointmentSlote = require('./Admin/appointmentSloteModel.js')(sequelize, Sequelize);
+db.category = require('./Admin/Master/categorymodel.js')(sequelize, Sequelize);
+db.language = require('./Admin/Master/languageModel.js')(sequelize, Sequelize);
+db.level = require('./Admin/Master/levelModel.js')(sequelize, Sequelize);
+db.medium = require('./Admin/Master/mediumModel.js')(sequelize, Sequelize);
+db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
 
 // Patient
 db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
@@ -39,6 +44,7 @@ db.previousUpdateRecordUser = require('./User/previousUpdateRecordUserModel.js')
 
 // Association
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'createrCode' });
+
 db.adminInformation.hasMany(db.employeesInformation, { foreignKey: 'createrCode' });
 
 db.adminInformation.hasMany(db.adminCourse, { foreignKey: 'createrCode' });
@@ -66,6 +72,21 @@ db.previousUpdateRecordEmployees.belongsTo(db.employeesInformation, { foreignKey
 
 db.appointmentSlote.hasMany(db.patientAppointment, { foreignKey: 'appointmentSloteId', as: 'patientDetail' });
 db.patientAppointment.belongsTo(db.appointmentSlote, { foreignKey: 'appointmentSloteId', as: 'bookingSlote' });
+
+db.adminInformation.hasMany(db.category, { foreignKey: 'createrCode' });
+db.category.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.language, { foreignKey: 'createrCode' });
+db.language.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.medium, { foreignKey: 'createrCode' });
+db.medium.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.level, { foreignKey: 'createrCode' });
+db.level.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.topic, { foreignKey: 'createrCode' });
+db.topic.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
 // This many to many relation auto deleteing table after create it.......?
 // db.leadProfile.belongsToMany(

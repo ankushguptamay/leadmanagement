@@ -4,7 +4,7 @@ const multer = require("multer");
 const filter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) {
         cb(null, true);
-    }  else {
+    } else {
         cb("Please upload only Image or PDF.", false);
     }
 };
@@ -13,6 +13,8 @@ var storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === "courseImage") {
             cb(null, path.join(`${__dirname}/../../Resource/CourseImage`));
+        } else if (file.fieldname === "categoryThumbnail") {
+            cb(null, path.join(`${__dirname}/../../Resource/CategoryThumbnail`));
         }
     },
     filename: (req, file, callback) => {

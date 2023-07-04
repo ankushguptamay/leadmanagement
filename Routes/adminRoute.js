@@ -6,8 +6,13 @@ const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignL
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
 const { addCourse, getAllCourse } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
-const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote } = require('../Controller/Admin/appointmentSloteController');
+const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');
 const { bookPatientAppointment } = require('../Controller/Patient/patientAppointment');
+const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
+const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
+const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
+const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
+const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const leadManagement = express.Router();
 
 // middleware
@@ -51,10 +56,29 @@ leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);
-leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote);// as notification
 
 leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
 leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);
+
+leadManagement.post("/addCategory", jwt.verifyJWT, isAdminPresent, uploadImage.single('categoryThumbnail'), addCategory);
+leadManagement.get("/categories", jwt.verifyJWT, isAdminPresent, getAllCategory);
+leadManagement.delete("/deleteCategory/:categoryCode", jwt.verifyJWT, isAdminPresent, deleteCategory);
+
+leadManagement.post("/addLanguage", jwt.verifyJWT, isAdminPresent, addLanguage);
+leadManagement.get("/languages", jwt.verifyJWT, isAdminPresent, getAllLanguage);
+leadManagement.delete("/deleteLanguage/:languageCode", jwt.verifyJWT, isAdminPresent, deleteLanguage);
+
+leadManagement.post("/addLevel", jwt.verifyJWT, isAdminPresent, addLevel);
+leadManagement.get("/levels", jwt.verifyJWT, isAdminPresent, getAllLevel);
+leadManagement.delete("/deleteLevel/:levelCode", jwt.verifyJWT, isAdminPresent, deleteLevel);
+
+leadManagement.post("/addMedium", jwt.verifyJWT, isAdminPresent, addMedium);
+leadManagement.get("/mediums", jwt.verifyJWT, isAdminPresent, getAllMedium);
+leadManagement.delete("/deleteMedium/:mediumCode", jwt.verifyJWT, isAdminPresent, deleteMedium);
+
+leadManagement.post("/addTopic", jwt.verifyJWT, isAdminPresent, addTopic);
+leadManagement.get("/topics", jwt.verifyJWT, isAdminPresent, getAllTopic);
+leadManagement.delete("/deleteTopic/:topicCode", jwt.verifyJWT, isAdminPresent, deleteTopic);
 
 leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 
