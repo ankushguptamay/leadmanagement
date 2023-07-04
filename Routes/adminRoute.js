@@ -1,9 +1,9 @@
 const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
 const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead, deletePreviousLead, getLeadByLeadCode } = require('../Controller/Lead/leadProfileController');
-const { registerUser, users, deleteUser, restoreUser, searchUser } = require('../Controller/User/userInformationCont');
+const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/User/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
-const { allEmployeesInformation, registerEmployee, deleteEmployees, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
+const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
 const { addCourse, getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
 const { addCourseContent } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote } = require('../Controller/Admin/appointmentSloteController');
@@ -23,6 +23,7 @@ leadManagement.put("/updateInformation", jwt.verifyJWT, updateAdminName);
 
 leadManagement.post("/registerUser", jwt.verifyJWT, isAdminPresent, registerUser);
 leadManagement.get("/users", jwt.verifyJWT, isAdminPresent, users);
+leadManagement.get("/deletedUsers", jwt.verifyJWT, isAdminPresent, deletedUsers);
 leadManagement.delete("/deleteUser/:userCode", jwt.verifyJWT, isAdminPresent, deleteUser);
 leadManagement.post("/restoreUser/:userCode", jwt.verifyJWT, isAdminPresent, restoreUser);
 leadManagement.get("/searchUser", jwt.verifyJWT, isAdminPresent, searchUser);
@@ -39,7 +40,9 @@ leadManagement.post("/assignLeadToUser", jwt.verifyJWT, isAdminPresent, assignLe
 leadManagement.post("/rollBackAssign", jwt.verifyJWT, isAdminPresent, rollBackAssign);
 
 leadManagement.post("/registerEmployee", jwt.verifyJWT, isAdminPresent, registerEmployee);
+leadManagement.get("/searchEmployees", jwt.verifyJWT, isAdminPresent, searchEmployees);
 leadManagement.get("/allEmployeesInformation", jwt.verifyJWT, isAdminPresent, allEmployeesInformation);
+leadManagement.get("/deletedEmployeesInformation", jwt.verifyJWT, isAdminPresent, deletedEmployeesInformation);
 leadManagement.delete("/deleteEmployees/:employeesCode", jwt.verifyJWT, isAdminPresent, deleteEmployees);
 leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPresent, restoreEmployee);
 
@@ -52,8 +55,6 @@ leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, 
 leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote);// as notification
 
 leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
-
-leadManagement.get("/searchEmployees", jwt.verifyJWT, isAdminPresent, searchEmployees);
 
 leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 

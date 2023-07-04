@@ -1,7 +1,7 @@
 const db = require('../../Models');
 const { employeeRegistration } = require("../../Middleware/validation");
 const jwt = require("jsonwebtoken");
-const { Op, Sequelize } = require("sequelize");
+const { Op } = require("sequelize");
 const EmployeesInformation = db.employeesInformation;
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID, JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 
@@ -86,7 +86,7 @@ exports.registerEmployee = async (req, res) => {
     }
 };
 
-// for admin
+// for admin not deleted
 exports.allEmployeesInformation = async (req, res) => {
     try {
         const employee = await EmployeesInformation.findAll({
@@ -97,6 +97,31 @@ exports.allEmployeesInformation = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Employees Information fetched successfully!",
+            data: employee
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.deletedEmployeesInformation = async (req, res) => {
+    try {
+        const employee = await EmployeesInformation.findAll({
+            where: {
+                deletedAt: {
+                    [Op.ne]: null
+                }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: " Deleted Employees Information fetched successfully!",
             data: employee
         });
     } catch (err) {

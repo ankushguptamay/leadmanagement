@@ -217,7 +217,7 @@ exports.userInformation = async (req, res) => {
     }
 }
 
-// for admin
+// for admin not deleted
 exports.users = async (req, res) => {
     try {
         const users = await UserInformation.findAll({
@@ -228,6 +228,32 @@ exports.users = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Users Information fetched successfully!",
+            data: users
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin only deleted
+exports.deletedUsers = async (req, res) => {
+    try {
+        const users = await UserInformation.findAll({
+            where: {
+                deletedAt: {
+                    [Op.ne]: null
+                }
+            },
+            order: [
+                ['createdAt', 'ASC']
+            ]
+        });
+        res.status(200).send({
+            success: true,
+            message: "Deleted Users Information fetched successfully!",
             data: users
         });
     } catch (err) {
