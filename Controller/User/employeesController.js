@@ -110,6 +110,7 @@ exports.allEmployeesInformation = async (req, res) => {
 exports.deletedEmployeesInformation = async (req, res) => {
     try {
         const employee = await EmployeesInformation.findAll({
+            paranoid:false,
             where: {
                 deletedAt: {
                     [Op.ne]: null
