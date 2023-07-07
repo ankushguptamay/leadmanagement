@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const admin = require('./Routes/adminRoute');
 const leadUser = require('./Routes/leadUserRoute');
 const student = require('./Routes/studentRoute');
+const appUser = require('./Routes/appUserRoute');
 const db = require('./Models');
 
 db.sequelize.sync()
@@ -24,6 +25,7 @@ app.use(cors());
 app.use('/api/user', leadUser);
 app.use('/api/admin', admin);
 app.use('/api/student', student);
+app.use('/api/appUser', appUser);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });

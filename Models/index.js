@@ -43,7 +43,7 @@ db.userInformation = require('./Lead/userInfoModel.js')(sequelize, Sequelize);
 db.employeesInformation = require('./Employee/epmloyeesInfoModel.js')(sequelize, Sequelize);
 
 // AppUser
-// db.appUser = require('./AppUser/appUserModel.js')(sequelize, Sequelize);
+db.appUser = require('./AppUser/appUserModel.js')(sequelize, Sequelize);
 
 // Student
 db.student = require('./Student/studentModel.js')(sequelize, Sequelize);

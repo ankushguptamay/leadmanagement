@@ -13,6 +13,7 @@ const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/A
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
+const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
 const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
 
@@ -91,6 +92,8 @@ leadManagement.post("/addSecondCourseToStudent", jwt.verifyJWT, isAdminPresent, 
 leadManagement.delete("/removeCourseFromStudent/:id", jwt.verifyJWT, isAdminPresent, removeCourseFromStudent); // id= course_studentId
 
 leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
+
+leadManagement.get("/getAppUserForAdmin", jwt.verifyJWT, isAdminPresent, getAppUserForAdmin);
 
 leadManagement.post("/createLeadFromOutSource", createLead); // social media
 

@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 const Student_Course = db.student_Course;
 const Student = db.student;
 const AdminCourse = db.adminCourse;
-const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN } = process.env;
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID, JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 
 const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
     lazyLoading: true
