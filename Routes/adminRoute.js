@@ -1,9 +1,9 @@
 const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
 const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead, deletePreviousLead, getLeadByLeadCode } = require('../Controller/Lead/leadProfileController');
-const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/User/userInformationCont');
+const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/Lead/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
-const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/User/employeesController');
+const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
 const { addCourse, getAllCourse } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');

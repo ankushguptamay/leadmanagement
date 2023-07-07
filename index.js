@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const admin = require('./Routes/adminRoute');
-const user = require('./Routes/userRoute');
+const leadUser = require('./Routes/leadUserRoute');
 const db = require('./Models');
 
 db.sequelize.sync()
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/api/user', user);
+app.use('/api/user', leadUser);
 app.use('/api/admin', admin);
 app.get('/', (req, res) => {
     res.send('Hello World!');

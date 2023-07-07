@@ -242,7 +242,7 @@ exports.users = async (req, res) => {
 exports.deletedUsers = async (req, res) => {
     try {
         const users = await UserInformation.findAll({
-            paranoid:false,
+            paranoid: false,
             where: {
                 deletedAt: {
                     [Op.ne]: null

@@ -35,12 +35,12 @@ db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequeliz
 // Lead
 db.leadProfile = require('./Lead/leadProfileModel.js')(sequelize, Sequelize);
 db.previousUpdateRecordLead = require('./Lead/previousUpdateRecordLeadModel.js')(sequelize, Sequelize);
+db.previousUpdateRecordEmployees = require('./Employee/previousUpdateRecordEmployeesModel.js')(sequelize, Sequelize);
+db.previousUpdateRecordUser = require('./Lead/previousUpdateRecordUserModel.js')(sequelize, Sequelize);
 
-// User
-db.userInformation = require('./User/userInfoModel.js')(sequelize, Sequelize);
-db.employeesInformation = require('./User/epmloyeesInfoModel.js')(sequelize, Sequelize);
-db.previousUpdateRecordEmployees = require('./User/previousUpdateRecordEmployeesModel.js')(sequelize, Sequelize);
-db.previousUpdateRecordUser = require('./User/previousUpdateRecordUserModel.js')(sequelize, Sequelize);
+// Employee
+db.userInformation = require('./Lead/userInfoModel.js')(sequelize, Sequelize);
+db.employeesInformation = require('./Employee/epmloyeesInfoModel.js')(sequelize, Sequelize);
 
 // Association
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'createrCode' });

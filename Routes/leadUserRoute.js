@@ -1,5 +1,5 @@
 const express = require('express');
-const { login, verifyLoginOtp, userInformation } = require('../Controller/User/userInformationCont');
+const { login, verifyLoginOtp, userInformation } = require('../Controller/Lead/userInformationCont');
 const { createLead, getAllLeadForUser, updateLeadProfile, getLeadByLeadCode } = require('../Controller/Lead/leadProfileController');
 const leadManagement = express.Router();
 
