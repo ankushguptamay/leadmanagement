@@ -135,3 +135,37 @@ exports.addPatientAppointment = (data) => {
     });
     return schema.validate(data);
 }
+
+exports.studentRegistration = (data) => {
+    const schema = joi.object().keys({
+        name: joi.string().min(3).max(30).required(),
+        email: joi.string().email().required().label('Email'),
+        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required(),
+        date: joi.string().required(),
+        adminCourseId: joi.string().required()
+    });
+    return schema.validate(data);
+}
+
+exports.studentLogin = (data) => {
+    const schema = joi.object().keys({
+        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
+    });
+    return schema.validate(data);
+}
+
+exports.studentLoginOTP = (data) => {
+    const schema = joi.object().keys({
+        phoneOTP: joi.string().length(6).required(),
+        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
+    });
+    return schema.validate(data);
+}
+
+exports.courseToStudent = (data) => {
+    const schema = joi.object().keys({
+        adminCourseId: joi.string().required(),
+        studentId: joi.string().required()
+    });
+    return schema.validate(data);
+}

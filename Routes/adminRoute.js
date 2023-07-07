@@ -13,6 +13,7 @@ const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/A
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
+const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
 
 // middleware
@@ -79,6 +80,15 @@ leadManagement.delete("/deleteMedium/:mediumCode", jwt.verifyJWT, isAdminPresent
 leadManagement.post("/addTopic", jwt.verifyJWT, isAdminPresent, addTopic);
 leadManagement.get("/topics", jwt.verifyJWT, isAdminPresent, getAllTopic);
 leadManagement.delete("/deleteTopic/:topicCode", jwt.verifyJWT, isAdminPresent, deleteTopic);
+
+leadManagement.post("/registerStudent", jwt.verifyJWT, isAdminPresent, registerStudent);
+leadManagement.get("/student", jwt.verifyJWT, isAdminPresent, searchAndGetActiveStudent);
+leadManagement.get("/getDeletedStudent", jwt.verifyJWT, isAdminPresent, getDeletedStudent);
+leadManagement.delete("/deleteStudent/:id", jwt.verifyJWT, isAdminPresent, deleteStudent); // id= studentId
+leadManagement.post("/restoreStudent/:id", jwt.verifyJWT, isAdminPresent, restoreStudent); // id= studentId
+leadManagement.get("/getStudent/:id", jwt.verifyJWT, isAdminPresent, getStudentForAdminById); // id= studentId
+leadManagement.post("/addSecondCourseToStudent", jwt.verifyJWT, isAdminPresent, addSecondCourseToStudent);
+leadManagement.delete("/removeCourseFromStudent/:id", jwt.verifyJWT, isAdminPresent, removeCourseFromStudent); // id= course_studentId
 
 leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 

@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
     const AppUser = sequelize.define("appUser", {
         id: {
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true
         },
         name: {
             type: DataTypes.STRING
@@ -12,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         phoneNumber: {
             type: DataTypes.STRING
-        },
-        date: {
-            type: DataTypes.DATEONLY,
-            defaultValue: DataTypes.NOW
         }
     })
     return AppUser;

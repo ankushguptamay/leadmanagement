@@ -2,6 +2,7 @@ const db = require('../../Models');
 const { Op } = require("sequelize");
 const { addAdminCourseContent } = require("../../Middleware/validation");
 const AdminCourseContent = db.adminCourseContent;
+const Student_Course = db.student_Course;
 
 exports.addCourseContent = async (req, res) => {
     try {
@@ -55,6 +56,42 @@ exports.getCourseContentByCourseId = async (req, res) => {
             message: "Course content fetched successfully!",
             data: content
         });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+exports.getCourseContentByCourseIdForStudent = async (req, res) => {
+    try {
+        const courseId = req.params.courseId;
+        const studentId = req.student.id;
+        const isCourse = await Student_Course.findOne({
+            where: {
+                studentId: studentId,
+                adminCourseId: courseId
+            }
+        });
+        if (!isCourse) {
+            res.status(400).send({
+                success: false,
+                message: "You can't access this course!"
+            });
+        } else {
+            const content = await AdminCourseContent.findAll({
+                where: { courseId: courseId },
+                order: [
+                    ['createdAt', 'DESC']
+                ]
+            });
+            res.status(200).send({
+                success: true,
+                message: "Course content fetched successfully!",
+                data: content
+            });
+        }
     } catch (err) {
         res.status(500).send({
             success: false,
