@@ -59,7 +59,7 @@ leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.sin
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
 leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), updateCourseImage);
 leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
-// leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
+leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);

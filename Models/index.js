@@ -28,7 +28,7 @@ db.language = require('./Admin/Master/languageModel.js')(sequelize, Sequelize);
 db.level = require('./Admin/Master/levelModel.js')(sequelize, Sequelize);
 db.medium = require('./Admin/Master/mediumModel.js')(sequelize, Sequelize);
 db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
-// db.courseContentNotes = require('./Admin/courseContentNotesModel.js')(sequelize, Sequelize);
+db.courseContentNotes = require('./Admin/courseContentNotesModel.js')(sequelize, Sequelize);
 
 // Patient
 db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
@@ -101,11 +101,11 @@ db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' }
 db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent', onDelete: 'cascade' });
 db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
 
-// db.adminCourse.hasMany(db.courseContentNotes, { foreignKey: 'courseId', as: "contentNotes" });
-// db.courseContentNotes.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: "adminCourse" });
+db.adminCourse.hasMany(db.courseContentNotes, { foreignKey: 'courseId', as: "contentNotes" });
+db.courseContentNotes.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: "adminCourse" });
 
-// db.adminCourseContent.hasMany(db.courseContentNotes, { foreignKey: 'contentId', as: 'contentNotes', onDelete: 'cascade' });
-// db.courseContentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 'content' });
+db.adminCourseContent.hasMany(db.courseContentNotes, { foreignKey: 'contentId', as: 'contentNotes', onDelete: 'cascade' });
+db.courseContentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 'content' });
 
 // This many to many relation auto deleteing table after create it.......?
 // db.leadProfile.belongsToMany(
@@ -129,6 +129,6 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
-queryInterface.removeColumn('adminCourseContents', "contentNotes");
+// queryInterface.removeColumn('adminCourseContents', "contentNotes");
 
 module.exports = db;

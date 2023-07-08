@@ -1,9 +1,9 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
 const { addAdminCourse } = require("../../Middleware/validation");
-const { deleteSingleFile } = require("../../Util/deleteFile")
+const { deleteSingleFile, deleteMultiFile } = require("../../Util/deleteFile")
 const AdminCourse = db.adminCourse;
-const AdminCourseContent = db.adminCourseContent;
+const CourseContentNotes = db.courseContentNotes;
 
 exports.addCourse = async (req, res) => {
     try {
@@ -189,9 +189,17 @@ exports.deleteCourse = async (req, res) => {
                 message: "Course is not present!"
             });
         }
+        const notes = await CourseContentNotes.findAll({ where: { courseId: req.params.id } });
+        const notesArray = [];
+        for (let i = 0; i < notes.length; i++) {
+            if (notes[i].note) {
+                notesArray.push(notes[i].note);
+            }
+        }
         if (course.courseImage) {
             deleteSingleFile(course.courseImage);
         }
+        deleteMultiFile(notesArray);
         await course.destroy()
         res.status(200).send({
             success: true,

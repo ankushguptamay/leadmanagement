@@ -22,16 +22,22 @@ exports.addCourseContent = async (req, res) => {
         }
         const notes = (req.files).map((file => { return file.path }));
         const { videoTitle, videoLink, videoType, course, subject } = req.body;
-        await AdminCourseContent.create({
+        const adminCourseContent = await AdminCourseContent.create({
             videoLink: videoLink,
             videoTitle: videoTitle,
             videoType: videoType,
             subject: subject,
             course: course,
-            contentNotes: notes,
             courseId: req.params.courseId,
             createrCode: req.user.code
         });
+        for (let i = 0; i < notes.length; i++) {
+            await CourseContentNotes.create({
+                note: notes[i],
+                courseId: req.params.courseId,
+                contentId: adminCourseContent.id
+            })
+        }
         res.status(200).send({
             success: true,
             message: "Course Content Created successfully!"
