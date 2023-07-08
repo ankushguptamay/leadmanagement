@@ -115,3 +115,20 @@ exports.getAppointmentSloteByDateForPatient = async (req, res) => {
         });
     }
 };
+
+exports.getAppointment = async (req, res) => {
+    try {
+        const slote = await AppointmentSlote.findAll({
+        });
+        res.status(200).send({
+            success: true,
+            message: "Appointment Slote fetched by date successfully!",
+            data: slote
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
