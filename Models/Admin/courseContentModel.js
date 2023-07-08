@@ -1,5 +1,3 @@
-const courseModel = require("./courseModel");
-
 module.exports = (sequelize, DataTypes) => {
     const AdminCourseContent = sequelize.define("adminCourseContent", {
         id: {
@@ -21,9 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         subject:{
             type:DataTypes.STRING
-        },
-        contentNotes:{
-            type:DataTypes.JSON
         }
     })
     return AdminCourseContent;

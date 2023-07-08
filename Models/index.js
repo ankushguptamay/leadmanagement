@@ -13,7 +13,7 @@ const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.passw
 });
 
 const db = {};
-
+const queryInterface = sequelize.getQueryInterface();
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
@@ -28,6 +28,7 @@ db.language = require('./Admin/Master/languageModel.js')(sequelize, Sequelize);
 db.level = require('./Admin/Master/levelModel.js')(sequelize, Sequelize);
 db.medium = require('./Admin/Master/mediumModel.js')(sequelize, Sequelize);
 db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
+// db.courseContentNotes = require('./Admin/courseContentNotesModel.js')(sequelize, Sequelize);
 
 // Patient
 db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
@@ -53,14 +54,6 @@ db.student_Course = require('./Student/student_CourseModel.js')(sequelize, Seque
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'createrCode' });
 
 db.adminInformation.hasMany(db.employeesInformation, { foreignKey: 'createrCode' });
-
-db.adminInformation.hasMany(db.adminCourse, { foreignKey: 'createrCode' });
-db.adminCourse.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
-
-db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' });
-
-db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent' });
-db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
 
 db.adminInformation.hasMany(db.appointmentSlote, { foreignKey: 'createrCode' });
 db.appointmentSlote.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
@@ -99,6 +92,21 @@ db.topic.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 db.student.belongsToMany(db.adminCourse, { through: "student_Course", as: 'courses' });
 db.adminCourse.belongsToMany(db.student, { through: "student_Course", as: "students" });
 
+// Association bt Course, Content And Notes
+db.adminInformation.hasMany(db.adminCourse, { foreignKey: 'createrCode' });
+db.adminCourse.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' });
+
+db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent', onDelete: 'cascade' });
+db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
+
+// db.adminCourse.hasMany(db.courseContentNotes, { foreignKey: 'courseId', as: "contentNotes" });
+// db.courseContentNotes.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: "adminCourse" });
+
+// db.adminCourseContent.hasMany(db.courseContentNotes, { foreignKey: 'contentId', as: 'contentNotes', onDelete: 'cascade' });
+// db.courseContentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 'content' });
+
 // This many to many relation auto deleteing table after create it.......?
 // db.leadProfile.belongsToMany(
 //     db.userInformation, {
@@ -120,5 +128,7 @@ db.adminCourse.belongsToMany(db.student, { through: "student_Course", as: "stude
 //     as: "leads"
 // }
 // );
+
+queryInterface.removeColumn('adminCourseContents', "contentNotes");
 
 module.exports = db;

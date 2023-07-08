@@ -5,7 +5,7 @@ const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLe
 const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/Lead/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
-const { addCourse, getAllCourse } = require('../Controller/Admin/courseController');
+const { addCourse, getAllCourse, updateCourse, updateCourseImage, deleteCourse } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
@@ -57,6 +57,9 @@ leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPre
 
 leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), addCourse);
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
+leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), updateCourseImage);
+leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
+// leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);

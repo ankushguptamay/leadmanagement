@@ -1,8 +1,10 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
 const { addAdminCourseContent } = require("../../Middleware/validation");
+const { deleteMultiFile } = require("../../Util/deleteFile")
 const AdminCourseContent = db.adminCourseContent;
 const Student_Course = db.student_Course;
+const CourseContentNotes = db.courseContentNotes;
 
 exports.addCourseContent = async (req, res) => {
     try {
@@ -42,14 +44,22 @@ exports.addCourseContent = async (req, res) => {
     }
 };
 
+// for admin
 exports.getCourseContentByCourseId = async (req, res) => {
     try {
         const courseId = req.params.courseId;
         const content = await AdminCourseContent.findAll({
             where: { courseId: courseId },
             order: [
-                ['createdAt', 'DESC']
-            ]
+                ['createdAt', 'ASC']
+            ],
+            include: [{
+                model: CourseContentNotes,
+                as: "contentNotes",
+                order: [
+                    ['createdAt', 'DESC']
+                ]
+            }]
         });
         res.status(200).send({
             success: true,
@@ -64,6 +74,7 @@ exports.getCourseContentByCourseId = async (req, res) => {
     }
 };
 
+// for student/public
 exports.getCourseContentByCourseIdForStudent = async (req, res) => {
     try {
         const courseId = req.params.courseId;
@@ -83,8 +94,15 @@ exports.getCourseContentByCourseIdForStudent = async (req, res) => {
             const content = await AdminCourseContent.findAll({
                 where: { courseId: courseId },
                 order: [
-                    ['createdAt', 'DESC']
-                ]
+                    ['createdAt', 'ASC']
+                ],
+                include: [{
+                    model: CourseContentNotes,
+                    as: "contentNotes",
+                    order: [
+                        ['createdAt', 'DESC']
+                    ]
+                }]
             });
             res.status(200).send({
                 success: true,
@@ -92,6 +110,88 @@ exports.getCourseContentByCourseIdForStudent = async (req, res) => {
                 data: content
             });
         }
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+// for admin
+exports.updateCourseContent = async (req, res) => {
+    try {
+        // Validate body
+        const { error } = addAdminCourseContent(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
+        const adminCourseContent = await AdminCourseContent.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!adminCourseContent) {
+            return res.status(400).send({
+                success: true,
+                message: "Course Content is not present!"
+            });
+        }
+        const { videoTitle, videoLink, videoType, course, subject } = req.body;
+        await adminCourseContent.update({
+            ...adminCourseContent,
+            videoLink: videoLink,
+            videoTitle: videoTitle,
+            videoType: videoType,
+            subject: subject,
+            course: course
+        });
+        res.status(200).send({
+            success: true,
+            message: "Course Content updated successfully!"
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+// for admin
+exports.CourseContent = async (req, res) => {
+    try {
+        // Validate body
+        const { error } = addAdminCourseContent(req.body);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
+        const adminCourseContent = await AdminCourseContent.findOne({
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!adminCourseContent) {
+            return res.status(400).send({
+                success: true,
+                message: "Course Content is not present!"
+            });
+        }
+        const { videoTitle, videoLink, videoType, course, subject } = req.body;
+        await adminCourseContent.update({
+            ...adminCourseContent,
+            videoLink: videoLink,
+            videoTitle: videoTitle,
+            videoType: videoType,
+            subject: subject,
+            course: course
+        });
+        res.status(200).send({
+            success: true,
+            message: "Course Content updated successfully!"
+        });
     } catch (err) {
         res.status(500).send({
             success: false,
