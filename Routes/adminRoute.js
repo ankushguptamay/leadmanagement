@@ -8,7 +8,6 @@ const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmplo
 const { addCourse, getAllCourse } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');
-const { bookPatientAppointment } = require('../Controller/Patient/patientAppointment');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
 const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
@@ -93,8 +92,6 @@ leadManagement.post("/restoreStudent/:id", jwt.verifyJWT, isAdminPresent, restor
 leadManagement.get("/getStudent/:id", jwt.verifyJWT, isAdminPresent, getStudentForAdminById); // id= studentId
 leadManagement.post("/addSecondCourseToStudent", jwt.verifyJWT, isAdminPresent, addSecondCourseToStudent);
 leadManagement.delete("/removeCourseFromStudent/:id", jwt.verifyJWT, isAdminPresent, removeCourseFromStudent); // id= course_studentId
-
-leadManagement.post("/bookPatientAppointment/:sloteId", bookPatientAppointment);// for patient
 
 leadManagement.get("/getAppUserForAdmin", jwt.verifyJWT, isAdminPresent, getAppUserForAdmin);
 
