@@ -142,6 +142,7 @@ exports.getAllLeadForUser = async (req, res) => {
     }
 }
 
+// for admin
 exports.updateLeadProfile = async (req, res) => {
     try {
         const lead = await LeadProfile.findOne({
@@ -212,7 +213,7 @@ exports.updateLeadProfile = async (req, res) => {
     }
 }
 
-
+// for admin
 exports.deleteLead = async (req, res) => {
     try {
         await LeadProfile.destroy({
@@ -235,6 +236,7 @@ exports.deleteLead = async (req, res) => {
     }
 }
 
+// for admin
 exports.restoreLead = async (req, res) => {
     try {
         await LeadProfile.restore({
@@ -255,6 +257,7 @@ exports.restoreLead = async (req, res) => {
     }
 }
 
+// for admin
 exports.deletePreviousLead = async (req, res) => {
     try {
         await PreviousUpdateRecordLead.destroy({
@@ -265,6 +268,47 @@ exports.deletePreviousLead = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "Previous Lead Profile deleted successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.countLeadByStatusForAdmin = async (req, res) => {
+    try {
+        const { query } = req.query;
+        let countLead;
+        if (query) {
+            countLead = await LeadProfile.count({ where: { status: query, assigned: true } });
+        }
+        countLead = await LeadProfile.count();
+        res.status(200).send({
+            success: true,
+            message: "Counted Lead successfully!",
+            data: countLead
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.countNewLeadForAdmin = async (req, res) => {
+    try {
+        const countLead = await LeadProfile.count({ where: { assigned: false } });
+        res.status(200).send({
+            success: true,
+            message: "Counted New Lead successfully!",
+            data: countLead
         });
 
     } catch (err) {
