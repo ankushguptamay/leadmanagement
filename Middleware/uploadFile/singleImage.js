@@ -17,6 +17,8 @@ var storage = multer.diskStorage({
             cb(null, path.join(`${__dirname}/../../Resource/CategoryThumbnail`));
         } else if (file.fieldname === "teacherImage") {
             cb(null, path.join(`${__dirname}/../../Resource/TeacherImage`));
+        } else if (file.fieldname === "bannerImage") {
+            cb(null, path.join(`${__dirname}/../../Resource/BannerImage`));
         }
     },
     filename: (req, file, callback) => {

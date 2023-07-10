@@ -12,6 +12,8 @@ const { addCategory, getAllCategory, deleteCategory } = require('../Controller/A
 const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
+const { addBanner, getAllBanner, deleteBanner } = require('../Controller/Admin/Master/bannerController');
+const { addDisease, getAllDisease, deleteDisease } = require('../Controller/Admin/Master/diseaseController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
 const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent,
@@ -81,6 +83,15 @@ leadManagement.delete("/deleteCategory/:categoryCode", jwt.verifyJWT, isAdminPre
 leadManagement.post("/addLanguage", jwt.verifyJWT, isAdminPresent, addLanguage);
 leadManagement.get("/languages", jwt.verifyJWT, isAdminPresent, getAllLanguage);
 leadManagement.delete("/deleteLanguage/:languageCode", jwt.verifyJWT, isAdminPresent, deleteLanguage);
+
+leadManagement.post("/addBanner", jwt.verifyJWT, isAdminPresent, uploadImage.single('bannerImage'), addBanner);
+leadManagement.get("/banners", jwt.verifyJWT, isAdminPresent, getAllBanner);
+leadManagement.delete("/deleteBanner/:bannerCode", jwt.verifyJWT, isAdminPresent, deleteBanner);
+
+leadManagement.post("/addDisease", jwt.verifyJWT, isAdminPresent, addDisease);
+leadManagement.get("/diseases", jwt.verifyJWT, isAdminPresent, getAllDisease);
+leadManagement.delete("/deleteDisease/:diseaseCode", jwt.verifyJWT, isAdminPresent, deleteDisease);
+
 
 leadManagement.post("/addLevel", jwt.verifyJWT, isAdminPresent, addLevel);
 leadManagement.get("/levels", jwt.verifyJWT, isAdminPresent, getAllLevel);

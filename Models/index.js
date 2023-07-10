@@ -28,6 +28,8 @@ db.language = require('./Admin/Master/languageModel.js')(sequelize, Sequelize);
 db.level = require('./Admin/Master/levelModel.js')(sequelize, Sequelize);
 db.medium = require('./Admin/Master/mediumModel.js')(sequelize, Sequelize);
 db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
+db.banner = require('./Admin/Master/bannerModel.js')(sequelize, Sequelize);
+db.disease = require('./Admin/Master/diseaseModel.js')(sequelize, Sequelize);
 
 // Patient
 db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
@@ -72,6 +74,7 @@ db.previousUpdateRecordEmployees.belongsTo(db.employeesInformation, { foreignKey
 db.appointmentSlote.hasMany(db.patientAppointment, { foreignKey: 'appointmentSloteId', as: 'patientDetail' });
 db.patientAppointment.belongsTo(db.appointmentSlote, { foreignKey: 'appointmentSloteId', as: 'bookingSlote' });
 
+// association bt admin and master
 db.adminInformation.hasMany(db.category, { foreignKey: 'createrCode' });
 db.category.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
@@ -86,6 +89,12 @@ db.level.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
 db.adminInformation.hasMany(db.topic, { foreignKey: 'createrCode' });
 db.topic.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.banner, { foreignKey: 'createrCode' });
+db.banner.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.disease, { foreignKey: 'createrCode' });
+db.disease.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
 // Association bt Course and Student
 db.student.belongsToMany(db.adminCourse, { through: "student_Course", as: 'courses' });
