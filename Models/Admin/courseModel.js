@@ -29,14 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         courseImage:{
             type: DataTypes.TEXT
         },
-        lesson:{
-            type: DataTypes.STRING
-        },
         duration:{
             type: DataTypes.STRING
         },
         subjects:{
-            type: DataTypes.STRING
+            type: DataTypes.JSON 
         }
     })
     return AdminCourse;

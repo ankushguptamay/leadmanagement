@@ -1,5 +1,7 @@
 const db = require('../../Models');
+const Sequelize = require("sequelize");
 const AdminInformation = db.adminInformation;
+const Employee = db.employeesInformation;
 const { adminLogin, adminRegistration } = require("../../Middleware/validation");
 const { JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 const jwt = require("jsonwebtoken");
@@ -167,6 +169,31 @@ exports.getAdmin = async (req, res) => {
                     { id: req.user.id }, { email: req.user.email }
                 ]
             }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Admin Profile Fetched successfully!",
+            data: admin
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.getAdminEmployee = async (req, res) => {
+    try {
+        const admin = await AdminInformation.findAll({
+            include:[{
+                model:Employee,
+                attributes: ["employeesCode"],
+            }],
+            attributes:[
+             [Sequelize.fn("COUNT", Sequelize.col("employeesInformations.employeesCode")), "total"] 
+            ],
+            group : ['adminInformation.adminCode']
         });
         res.status(200).send({
             success: true,
