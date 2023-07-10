@@ -13,25 +13,28 @@ exports.addCourse = async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        if (!req.file) {
-            return res.status(400).send({
-                success: false,
-                message: "Please..Upload course image!"
-            });
-        }
-        const { category, coursePrice, heading, description, level, language, courseName, lesson, duration, subjects } = req.body;
+        // if (!req.file) {
+        //     return res.status(400).send({
+        //         success: false,
+        //         message: "Please..Upload course image!"
+        //     });
+        // }
+        console.log( req.user.code)
+        const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;
         await AdminCourse.create({
             category: category,
             courseName: courseName,
             coursePrice: coursePrice,
             language: language,
-            lesson: lesson,
             heading: heading,
             description: description,
             level: level,
             duration: duration,
-            subjects: subjects,
-            courseImage: req.file.path,
+            coupen: coupen,
+            teacherName: teacherName,
+            introVideoLink: introVideoLink,
+            topic: topic,
+            // courseImage: req.file.path,
             createrCode: req.user.code
         });
         res.status(200).send({
@@ -101,7 +104,7 @@ exports.updateCourse = async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        const { category, coursePrice, heading, description, level, language, courseName, lesson, duration, subjects } = req.body;
+        const { category, coursePrice, heading, description, level, language, courseName, duration } = req.body;
         const course = await AdminCourse.findOne({
             where: {
                 id: req.params.id
@@ -119,12 +122,10 @@ exports.updateCourse = async (req, res) => {
             courseName: courseName,
             coursePrice: coursePrice,
             language: language,
-            lesson: lesson,
             heading: heading,
             description: description,
             level: level,
             duration: duration,
-            subjects: subjects
         })
         res.status(200).send({
             success: true,

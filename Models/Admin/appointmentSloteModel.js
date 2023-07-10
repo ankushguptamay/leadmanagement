@@ -16,12 +16,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.STRING,
-            allowNull: true
+            defaultValue: "Available"
         },
-        name: {
+        priceForIndian: {
             type: DataTypes.STRING
         },
-        phoneNumber: {
+        priceForNonIndian: {
             type: DataTypes.STRING
         }
     })

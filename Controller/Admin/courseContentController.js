@@ -14,30 +14,16 @@ exports.addCourseContent = async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        if (!req.files) {
-            return res.status(400).send({
-                success: false,
-                message: `You must select at least 1 File.`
-            });
-        }
-        const notes = (req.files).map((file => { return file.path }));
-        const { videoTitle, videoLink, videoType, course, subject } = req.body;
-        const adminCourseContent = await AdminCourseContent.create({
+        const { videoTitle, videoLink, videoType, course, subject, courseId } = req.body;
+        await AdminCourseContent.create({
             videoLink: videoLink,
             videoTitle: videoTitle,
             videoType: videoType,
             subject: subject,
             course: course,
-            courseId: req.params.courseId,
+            courseId: courseId,
             createrCode: req.user.code
         });
-        for (let i = 0; i < notes.length; i++) {
-            await CourseContentNotes.create({
-                note: notes[i],
-                courseId: req.params.courseId,
-                contentId: adminCourseContent.id
-            })
-        }
         res.status(200).send({
             success: true,
             message: "Course Content Created successfully!"
@@ -58,14 +44,7 @@ exports.getCourseContentByCourseId = async (req, res) => {
             where: { courseId: courseId },
             order: [
                 ['createdAt', 'ASC']
-            ],
-            include: [{
-                model: CourseContentNotes,
-                as: "contentNotes",
-                order: [
-                    ['createdAt', 'DESC']
-                ]
-            }]
+            ]
         });
         res.status(200).send({
             success: true,

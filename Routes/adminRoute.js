@@ -7,14 +7,15 @@ const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignL
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
 const { addCourse, getAllCourse, updateCourse, updateCourseImage, deleteCourse } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
-const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');
+const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote, bookedSloteByDate, availableSlote } = require('../Controller/Admin/appointmentSloteController');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
 const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
-const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
+const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, 
+    getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
 
 // middleware
@@ -63,6 +64,9 @@ leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, delete
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);
+leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote); // work as notification
+leadManagement.get("/bookedSloteByDate", jwt.verifyJWT, isAdminPresent, bookedSloteByDate);
+leadManagement.get("/availableSlote", jwt.verifyJWT, isAdminPresent, availableSlote);
 
 leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
 leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);

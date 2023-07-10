@@ -14,7 +14,7 @@ exports.bookPatientAppointment = async (req, res) => {
         }
         const isSlote = await AppointmentSlote.findOne({
             where: {
-                [Op.and]: [{ id: req.params.sloteId }, { status: null }]
+                [Op.and]: [{ id: req.params.sloteId }, { status: "Available" }]
             }
         })
         if (!isSlote) {

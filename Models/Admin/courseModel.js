@@ -32,8 +32,20 @@ module.exports = (sequelize, DataTypes) => {
         duration:{
             type: DataTypes.STRING
         },
-        subjects:{
+        topic:{
             type: DataTypes.JSON 
+        },
+        teacherName:{
+            type: DataTypes.STRING
+        },
+        teacherImage:{
+            type: DataTypes.STRING
+        },
+        coupen:{
+            type: DataTypes.STRING
+        },
+        introVideoLink:{
+            type: DataTypes.STRING
         }
     })
     return AdminCourse;
