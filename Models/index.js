@@ -122,13 +122,13 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
-queryInterface.dropTable("courseContentNotes");
-queryInterface.addColumn('leadProfiles', 'selectedDisease', { type: DataTypes.JSON });
-queryInterface.changeColumn('adminCourses', 'subjects', {
-    type: DataTypes.JSON,
-    // defaultValue: 3.14,
-    // allowNull: false
-});
-queryInterface.removeColumn('adminCourses', "lesson");
+// queryInterface.dropTable("courseContentNotes");
+// queryInterface.addColumn('leadProfiles', 'selectedDisease', { type: DataTypes.JSON });
+// queryInterface.changeColumn('adminCourses', 'subjects', {
+//     type: DataTypes.JSON,
+//     // defaultValue: 3.14,
+//     // allowNull: false
+// });
+// queryInterface.removeColumn('adminCourses', "lesson");
 
 module.exports = db;
