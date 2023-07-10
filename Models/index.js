@@ -128,14 +128,12 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 
 // queryInterface.removeColumn('adminCourses', "subjects");
 // queryInterface.addColumn('adminCourses', 'teacherName', { type: DataTypes.STRING });
-// queryInterface.addColumn('adminCourses', 'teacherImage', { type: DataTypes.STRING });
+// queryInterface.addColumn('adminCourses', 'teacherImage', { type: DataTypes.TEXT });
 // queryInterface.addColumn('adminCourses', 'topic', { type: DataTypes.JSON });
 // queryInterface.addColumn('adminCourses', 'coupen', { type: DataTypes.STRING });
 // queryInterface.addColumn('adminCourses', 'introVideoLink', { type: DataTypes.STRING });
 // queryInterface.changeColumn('adminCourseContents', 'subject', {
-//     type: DataTypes.JSON,
-//     // defaultValue: 3.14,
-//     // allowNull: false
+//     type: DataTypes.JSON
 // });
 // queryInterface.removeColumn('appointmentStoles', "name");
 // queryInterface.removeColumn('appointmentStoles', "phoneNumber");

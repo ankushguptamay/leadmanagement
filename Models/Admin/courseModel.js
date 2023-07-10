@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         teacherImage:{
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         coupen:{
             type: DataTypes.STRING

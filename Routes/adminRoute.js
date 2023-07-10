@@ -5,8 +5,8 @@ const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLe
 const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/Lead/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
-const { addCourse, getAllCourse, updateCourse, updateCourseImage, deleteCourse } = require('../Controller/Admin/courseController');
-const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
+const { addCourse, getAllCourse, updateCourse, updateCourseImage, updateTeacherImage, deleteCourse } = require('../Controller/Admin/courseController');
+const { addCourseContent, getCourseContentByCourseId, updateCourseContent, deleteCourseContent } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote, bookedSloteByDate, availableSlote } = require('../Controller/Admin/appointmentSloteController');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
 const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
@@ -14,7 +14,7 @@ const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Mast
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
-const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, 
+const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent,
     getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
 
@@ -56,9 +56,10 @@ leadManagement.get("/deletedEmployeesInformation", jwt.verifyJWT, isAdminPresent
 leadManagement.delete("/deleteEmployees/:employeesCode", jwt.verifyJWT, isAdminPresent, deleteEmployees);
 leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPresent, restoreEmployee);
 
-leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), addCourse);
+leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.fields([{ name: 'courseImage', maxCount: 1 }, { name: 'teacherImage', maxCount: 1 }]), addCourse);
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
 leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), updateCourseImage);
+leadManagement.put("/updateTeacherImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('teacherImage'), updateTeacherImage);
 leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
 leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
 
@@ -68,8 +69,10 @@ leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote); 
 leadManagement.get("/bookedSloteByDate", jwt.verifyJWT, isAdminPresent, bookedSloteByDate);
 leadManagement.get("/availableSlote", jwt.verifyJWT, isAdminPresent, availableSlote);
 
-leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
+leadManagement.post("/addCourseContent", jwt.verifyJWT, isAdminPresent, addCourseContent);
 leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);
+leadManagement.put("/updateContent/:id", jwt.verifyJWT, isAdminPresent, updateCourseContent);
+leadManagement.delete("/deleteContent/:id", jwt.verifyJWT, isAdminPresent, deleteCourseContent);
 
 leadManagement.post("/addCategory", jwt.verifyJWT, isAdminPresent, uploadImage.single('categoryThumbnail'), addCategory);
 leadManagement.get("/categories", jwt.verifyJWT, isAdminPresent, getAllCategory);
