@@ -182,28 +182,3 @@ exports.getAdmin = async (req, res) => {
         });
     }
 }
-
-exports.getAdminEmployee = async (req, res) => {
-    try {
-        const admin = await AdminInformation.findAll({
-            include:[{
-                model:Employee,
-                attributes: ["employeesCode"],
-            }],
-            attributes:[
-             [Sequelize.fn("COUNT", Sequelize.col("employeesInformations.employeesCode")), "total"] 
-            ],
-            group : ['adminInformation.adminCode']
-        });
-        res.status(200).send({
-            success: true,
-            message: "Admin Profile Fetched successfully!",
-            data: admin
-        });
-    } catch (err) {
-        res.status(500).send({
-            success: false,
-            message: err.message
-        });
-    }
-}

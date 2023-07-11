@@ -18,10 +18,10 @@ appUser.get("/getAppUser", jwt.verifyAppUserJWT, isAppUserPresent, getAppUserFor
 
 appUser.get("/getAllCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAllCourse);
 
-website.post("/bookPatientAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookPatientAppointment);
-website.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getAppointmentSloteByDateForPatient);
+appUser.post("/bookPatientAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookPatientAppointment);
+appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getAppointmentSloteByDateForPatient);
 
-website.get("/getAllCategory", jwt.verifyAppUserJWT, isAppUserPresent, getAllCategory);
-website.get("/getAllBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllBanner);
+appUser.get("/getAllCategory", jwt.verifyAppUserJWT, isAppUserPresent, getAllCategory);
+appUser.get("/getAllBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllBanner);
 
 module.exports = appUser;

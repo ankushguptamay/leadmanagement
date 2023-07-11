@@ -170,6 +170,7 @@ exports.updateLeadProfile = async (req, res) => {
             state: lead.state,
             website: lead.website,
             email: lead.email,
+            selectedDisease: lead.selectedDisease,
             phoneNumber: lead.phoneNumber,
             whatsAppNumber: lead.whatsAppNumber,
             leadProfileCode: req.params.leadCode,
@@ -179,7 +180,7 @@ exports.updateLeadProfile = async (req, res) => {
 
         })
         const { name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city,
-            country, state, website, email, phoneNumber, whatsAppNumber } = req.body;
+            country, state, website, email, phoneNumber, whatsAppNumber, selectedDisease } = req.body;
         await lead.update({
             ...lead,
             name: name,
@@ -196,6 +197,7 @@ exports.updateLeadProfile = async (req, res) => {
             state: state,
             website: website,
             email: email,
+            selectedDisease: selectedDisease,
             phoneNumber: phoneNumber,
             whatsAppNumber: whatsAppNumber,
             updaterCode: req.user.code
@@ -285,8 +287,9 @@ exports.countLeadByStatusForAdmin = async (req, res) => {
         let countLead;
         if (query) {
             countLead = await LeadProfile.count({ where: { status: query, assigned: true } });
+        } else {
+            countLead = await LeadProfile.count();
         }
-        countLead = await LeadProfile.count();
         res.status(200).send({
             success: true,
             message: "Counted Lead successfully!",
@@ -311,6 +314,46 @@ exports.countNewLeadForAdmin = async (req, res) => {
             data: countLead
         });
 
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.countLeadAssignToUser = async (req, res) => {
+    try {
+        const status = req.query.status;
+        const userCode = req.params.userCode;
+        let user;
+        if (status) {
+            user = await UserInformation.findOne({
+                where: { userCode: userCode },
+                include: [{
+                    model: LeadProfile,
+                    as: "leads",
+                    attributes: ["id", "status"],
+                    where: { status: status }
+                }]
+            });
+        } else {
+            user = await UserInformation.findOne({
+                where: { userCode: userCode },
+                include: [{
+                    model: LeadProfile,
+                    as: "leads",
+                    attributes: ["id", "status"]
+                }]
+            });
+        }
+        const count = user.leads.length;
+        res.status(200).send({
+            success: true,
+            message: "Lead Count successfully!",
+            data: { total: count }
+        });
     } catch (err) {
         res.status(500).send({
             success: false,

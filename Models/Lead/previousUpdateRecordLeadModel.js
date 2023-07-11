@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         requestType: {
             type: DataTypes.STRING
         },
+        selectedDisease: {
+            type: DataTypes.JSON
+        },
         city: {
             type: DataTypes.STRING
         },
