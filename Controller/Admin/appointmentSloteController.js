@@ -1,6 +1,6 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
-const { bookingSlote } = require("../../Middleware/validation");
+const { bookingSlote, getSloteForPatientValidation } = require("../../Middleware/validation");
 const AppointmentSlote = db.appointmentSlote;
 const PatientAppointment = db.patientAppointment;
 
@@ -122,9 +122,15 @@ exports.bookedSloteByDate = async (req, res) => {
     }
 };
 
-exports.getAppointmentSloteByDateForPatient = async (req, res) => {
+exports.getSloteByDateForPatient = async (req, res) => {
     try {
-        const date = req.query.date;
+        // validation
+        const { error } = getSloteForPatientValidation(req.query);
+        if (error) {
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
+        const { date, country } = req.query;
         const date1 = JSON.stringify(new Date());
         const date2 = JSON.stringify(new Date((new Date).getTime() + (1 * 24 * 60 * 60 * 1000)));
         const date3 = JSON.stringify(new Date((new Date).getTime() + (2 * 24 * 60 * 60 * 1000)));
@@ -140,9 +146,19 @@ exports.getAppointmentSloteByDateForPatient = async (req, res) => {
                 message: "Can't access more then seven days slote!"
             });
         }
-        const slote = await AppointmentSlote.findAll({
-            where: { date: date }
-        });
+        let slote;
+        if (country === 'IN') {
+            // console.log(country);
+            slote = await AppointmentSlote.findAll({
+                where: { date: date },
+                attributes: ["id", "priceForIndian", "date", "time", "status", "createdAt", "updatedAt"]
+            });
+        } else {
+            slote = await AppointmentSlote.findAll({
+                where: { date: date },
+                attributes: ["id", "priceForNonIndian", "date", "time", "status", "createdAt", "updatedAt"]
+            });
+        }
         res.status(200).send({
             success: true,
             message: "Appointment Slote fetched by date successfully!",
@@ -156,6 +172,7 @@ exports.getAppointmentSloteByDateForPatient = async (req, res) => {
     }
 };
 
+// for admin
 exports.availableSlote = async (req, res) => {
     try {
         const { error } = bookingSlote(req.body);
@@ -170,6 +187,31 @@ exports.availableSlote = async (req, res) => {
             success: true,
             message: "Appointment Slote fetched by date successfully!",
             data: slote
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+// for admin
+exports.deleteSlote = async (req, res) => {
+    try {
+        const slote = await AppointmentSlote.findOne({
+            where: { id: req.params.sloteId }
+        });
+        if (!slote) {
+            res.status(400).send({
+                success: false,
+                message: "Appointment Slote is not present!"
+            });
+        }
+        await slote.destroy();
+        res.status(200).send({
+            success: true,
+            message: "Appointment Slote deleted successfully!"
         });
     } catch (err) {
         res.status(500).send({

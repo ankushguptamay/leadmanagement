@@ -3,7 +3,7 @@ const { register, loginAppUser, verifyLoginOtp, getAppUserForAppUser } = require
 const { getAllCourse } = require('../Controller/Admin/courseController');
 const { getAllBanner } = require('../Controller/Admin/Master/bannerController');
 const { getAllCategory } = require('../Controller/Admin/Master/categoryController');
-const { getAppointmentSloteByDateForPatient } = require('../Controller/Admin/appointmentSloteController');
+const { getSloteByDateForPatient } = require('../Controller/Admin/appointmentSloteController');
 const { bookPatientAppointment } = require('../Controller/Patient/patientAppointment');
 const appUser = express.Router();
 
@@ -19,7 +19,7 @@ appUser.get("/getAppUser", jwt.verifyAppUserJWT, isAppUserPresent, getAppUserFor
 appUser.get("/getAllCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAllCourse);
 
 appUser.post("/bookPatientAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookPatientAppointment);
-appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getAppointmentSloteByDateForPatient);
+appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getSloteByDateForPatient);
 
 appUser.get("/getAllCategory", jwt.verifyAppUserJWT, isAppUserPresent, getAllCategory);
 appUser.get("/getAllBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllBanner);

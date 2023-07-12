@@ -192,3 +192,11 @@ exports.appUserLoginOTP = (data) => {
     });
     return schema.validate(data);
 }
+
+exports.getSloteForPatientValidation = (data) => {
+    const schema = joi.object().keys({
+        date: joi.string().required(),
+        country: joi.string().required()
+    });
+    return schema.validate(data);
+}

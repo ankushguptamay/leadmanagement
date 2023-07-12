@@ -151,5 +151,10 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // });
 
 // queryInterface.addColumn('previousUpdateRecordLeads', 'selectedDisease', { type: DataTypes.JSON });
+// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderDate', { type: DataTypes.DATE });
+// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderTime', { type: DataTypes.STRING });
+// queryInterface.addColumn('leadProfiles', 'reminderDate', { type: DataTypes.DATE });
+// queryInterface.addColumn('leadProfiles', 'reminderTime', { type: DataTypes.STRING });
+
 
 module.exports = db;

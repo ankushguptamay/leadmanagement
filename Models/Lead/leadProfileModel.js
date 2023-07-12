@@ -72,6 +72,12 @@ module.exports = (sequelize, DataTypes) => {
         updaterCode: {
             type: DataTypes.STRING,
             defaultValue: null
+        },
+        reminderDate: {
+            type: DataTypes.DATE
+        },
+        reminderTime: {
+            type: DataTypes.STRING
         }
     }, {
         paranoid: true
