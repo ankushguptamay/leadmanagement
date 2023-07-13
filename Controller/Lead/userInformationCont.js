@@ -11,10 +11,6 @@ const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
     lazyLoading: true
 });
 
-const twilioSMS = require("twilio")(PRAKHAR_TWILIO_ACCOUNT_SID, PRAKHAR_TWILIO_AUTH_TOKEN, {
-    lazyLoading: true
-});
-
 // Only Admin can register an user
 exports.registerUser = async (req, res) => {
     try {

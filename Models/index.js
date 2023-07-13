@@ -149,12 +149,12 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 //     type: DataTypes.STRING,
 //     defaultValue:"Available"
 // });
-
 // queryInterface.addColumn('previousUpdateRecordLeads', 'selectedDisease', { type: DataTypes.JSON });
 // queryInterface.addColumn('previousUpdateRecordLeads', 'reminderDate', { type: DataTypes.DATE });
 // queryInterface.addColumn('previousUpdateRecordLeads', 'reminderTime', { type: DataTypes.STRING });
 // queryInterface.addColumn('leadProfiles', 'reminderDate', { type: DataTypes.DATE });
 // queryInterface.addColumn('leadProfiles', 'reminderTime', { type: DataTypes.STRING });
 
+// queryInterface.addColumn('patientAppointments', 'phoneNumber', { type: DataTypes.STRING, allowNull: false });
 
 module.exports = db;

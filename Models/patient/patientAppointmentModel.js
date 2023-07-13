@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         patientProblem:{
             type: DataTypes.TEXT,
             allowNull: true
+        },
+        phoneNumber:{
+            type: DataTypes.STRING,
+            allowNull: false
         }
         
     })
