@@ -131,30 +131,5 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
-queryInterface.dropTable("courseContentNotes");
-// queryInterface.addColumn('leadProfiles', 'selectedDisease', { type: DataTypes.JSON });
-// queryInterface.removeColumn('adminCourses', "lesson");
-// queryInterface.removeColumn('adminCourses', "subjects");
-// queryInterface.addColumn('adminCourses', 'teacherName', { type: DataTypes.STRING });
-// queryInterface.addColumn('adminCourses', 'teacherImage', { type: DataTypes.TEXT });
-// queryInterface.addColumn('adminCourses', 'topic', { type: DataTypes.JSON });
-// queryInterface.addColumn('adminCourses', 'coupen', { type: DataTypes.STRING });
-// queryInterface.addColumn('adminCourses', 'introVideoLink', { type: DataTypes.STRING });
-// queryInterface.changeColumn('adminCourseContents', 'subject', { type: DataTypes.JSON });
-// queryInterface.removeColumn('appointmentStoles', "name");
-// queryInterface.removeColumn('appointmentStoles', "phoneNumber");
-// queryInterface.addColumn('appointmentStoles', 'priceForNonIndian', { type: DataTypes.STRING });
-// queryInterface.addColumn('appointmentStoles', 'priceForIndian', { type: DataTypes.STRING });
-// queryInterface.changeColumn('appointmentStoles', 'status', {
-//     type: DataTypes.STRING,
-//     defaultValue:"Available"
-// });
-// queryInterface.addColumn('previousUpdateRecordLeads', 'selectedDisease', { type: DataTypes.JSON });
-// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderDate', { type: DataTypes.DATE });
-// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderTime', { type: DataTypes.STRING });
-// queryInterface.addColumn('leadProfiles', 'reminderDate', { type: DataTypes.DATE });
-// queryInterface.addColumn('leadProfiles', 'reminderTime', { type: DataTypes.STRING });
-
-// queryInterface.addColumn('patientAppointments', 'phoneNumber', { type: DataTypes.STRING, allowNull: false });
 
 module.exports = db;

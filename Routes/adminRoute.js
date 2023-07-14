@@ -26,7 +26,7 @@ const { isAdminPresent } = require('../Middleware/isPresent');
 const uploadImage = require('../Middleware/uploadFile/singleImage');
 const uploadMultiPDF = require('../Middleware/uploadFile/multiPDF');
 
-// leadManagement.post("/register", registerAdmin);
+leadManagement.post("/register", registerAdmin);
 leadManagement.post("/login", loginAdmin);
 leadManagement.get("/information", jwt.verifyJWT, getAdmin);
 leadManagement.put("/updateInformation", jwt.verifyJWT, updateAdminName);
