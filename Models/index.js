@@ -131,5 +131,4 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
-
 module.exports = db;

@@ -11,7 +11,7 @@ const appUser = require('./Routes/appUserRoute');
 const website = require('./Routes/bookSloteWebsiteRoute');
 const db = require('./Models');
 
-db.sequelize.sync({ force: true })
+db.sequelize.sync()
     .then(() => {
         // console.log('Database is synced');
     })
