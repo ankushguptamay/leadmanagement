@@ -131,7 +131,7 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
-// queryInterface.dropTable("courseContentNotes");
+queryInterface.dropTable("courseContentNotes");
 // queryInterface.addColumn('leadProfiles', 'selectedDisease', { type: DataTypes.JSON });
 // queryInterface.removeColumn('adminCourses', "lesson");
 // queryInterface.removeColumn('adminCourses', "subjects");
