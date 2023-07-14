@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             type:DataTypes.STRING
         },
         subject:{
-            type:DataTypes.STRING
+            type:DataTypes.JSON
         }
     })
     return AdminCourseContent;

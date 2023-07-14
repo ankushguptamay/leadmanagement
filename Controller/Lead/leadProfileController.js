@@ -1,5 +1,5 @@
 const db = require('../../Models');
-const { Op, Sequelize } = require("sequelize");
+const { Op } = require("sequelize");
 const { createLeadValidation } = require("../../Middleware/validation");
 const LeadProfile = db.leadProfile;
 const UserInformation = db.userInformation;
@@ -170,16 +170,19 @@ exports.updateLeadProfile = async (req, res) => {
             state: lead.state,
             website: lead.website,
             email: lead.email,
+            selectedDisease: lead.selectedDisease,
             phoneNumber: lead.phoneNumber,
             whatsAppNumber: lead.whatsAppNumber,
             leadProfileCode: req.params.leadCode,
             createrCode: lead.createrCode,
             updaterCode: lead.updaterCode,
-            assigned: lead.assigned
+            assigned: lead.assigned,
+            reminderDate: lead.reminderDate,
+            reminderTime: lead.reminderTime
 
         })
         const { name, gender, jobTitle, salutation, leadOwner, source, status, leadType, requestType, city,
-            country, state, website, email, phoneNumber, whatsAppNumber } = req.body;
+            country, state, website, email, phoneNumber, whatsAppNumber, selectedDisease, reminderDate, reminderTime } = req.body;
         await lead.update({
             ...lead,
             name: name,
@@ -196,8 +199,11 @@ exports.updateLeadProfile = async (req, res) => {
             state: state,
             website: website,
             email: email,
+            selectedDisease: selectedDisease,
             phoneNumber: phoneNumber,
             whatsAppNumber: whatsAppNumber,
+            reminderDate: reminderDate,
+            reminderTime: reminderTime,
             updaterCode: req.user.code
 
         })
@@ -258,7 +264,7 @@ exports.restoreLead = async (req, res) => {
 }
 
 // for admin
-exports.deletePreviousLead = async (req, res) => {
+exports.deleteAllPreviousLead = async (req, res) => {
     try {
         await PreviousUpdateRecordLead.destroy({
             where: {
@@ -285,8 +291,9 @@ exports.countLeadByStatusForAdmin = async (req, res) => {
         let countLead;
         if (query) {
             countLead = await LeadProfile.count({ where: { status: query, assigned: true } });
+        } else {
+            countLead = await LeadProfile.count();
         }
-        countLead = await LeadProfile.count();
         res.status(200).send({
             success: true,
             message: "Counted Lead successfully!",
@@ -309,6 +316,89 @@ exports.countNewLeadForAdmin = async (req, res) => {
             success: true,
             message: "Counted New Lead successfully!",
             data: countLead
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.countLeadAssignToUser = async (req, res) => {
+    try {
+        const status = req.query.status;
+        const userCode = req.params.userCode;
+        let user;
+        if (status) {
+            user = await UserInformation.findOne({
+                where: { userCode: userCode },
+                include: [{
+                    model: LeadProfile,
+                    as: "leads",
+                    attributes: ["id", "status"],
+                    where: { status: status }
+                }]
+            });
+        } else {
+            user = await UserInformation.findOne({
+                where: { userCode: userCode },
+                include: [{
+                    model: LeadProfile,
+                    as: "leads",
+                    attributes: ["id", "status"]
+                }]
+            });
+        }
+        const count = user.leads.length;
+        res.status(200).send({
+            success: true,
+            message: "Lead Count successfully!",
+            data: { total: count }
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.deletePerticularPreviousLead = async (req, res) => {
+    try {
+        await PreviousUpdateRecordLead.destroy({
+            where: {
+                leadProfileCode: req.params.perviousLeadId
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Previous Lead Profile deleted successfully!"
+        });
+
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for admin
+exports.getAllPreviousLead = async (req, res) => {
+    try {
+        const previousLead = await PreviousUpdateRecordLead.findAll({
+            where: {
+                leadProfileCode: req.params.leadProfileCode
+            }
+        });
+        res.status(200).send({
+            success: true,
+            message: "Previous Lead Profile fetched successfully!",
+            data: previousLead
         });
 
     } catch (err) {

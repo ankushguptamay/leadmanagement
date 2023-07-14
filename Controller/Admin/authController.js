@@ -1,5 +1,7 @@
 const db = require('../../Models');
+const Sequelize = require("sequelize");
 const AdminInformation = db.adminInformation;
+const Employee = db.employeesInformation;
 const { adminLogin, adminRegistration } = require("../../Middleware/validation");
 const { JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 const jwt = require("jsonwebtoken");

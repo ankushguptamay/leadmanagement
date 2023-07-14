@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         requestType: {
             type: DataTypes.STRING
         },
+        selectedDisease: {
+            type: DataTypes.JSON
+        },
         city: {
             type: DataTypes.STRING
         },
@@ -65,6 +68,12 @@ module.exports = (sequelize, DataTypes) => {
         assigned: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
+        },
+        reminderDate: {
+            type: DataTypes.DATE
+        },
+        reminderTime: {
+            type: DataTypes.STRING
         }
     })
     return PreviousUpdateRecordLead;

@@ -1,43 +1,58 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
 const { addAdminCourse } = require("../../Middleware/validation");
-const { deleteSingleFile, deleteMultiFile } = require("../../Util/deleteFile")
+const { deleteSingleFile } = require("../../Util/deleteFile")
 const AdminCourse = db.adminCourse;
-const CourseContentNotes = db.courseContentNotes;
 
 exports.addCourse = async (req, res) => {
     try {
         // Validate body
         const { error } = addAdminCourse(req.body);
         if (error) {
+            if (req.files.courseImage) {
+                deleteSingleFile(req.files.courseImage[0].path);
+            }
+            if (req.files.teacherImage) {
+                deleteSingleFile(req.files.teacherImage[0].path);
+            }
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        if (!req.file) {
+        const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;
+        if (req.files.courseImage && req.files.teacherImage) {
+            await AdminCourse.create({
+                category: category,
+                courseName: courseName,
+                coursePrice: coursePrice,
+                language: language,
+                heading: heading,
+                description: description,
+                level: level,
+                duration: duration,
+                coupen: coupen,
+                teacherName: teacherName,
+                introVideoLink: introVideoLink,
+                topic: topic,
+                courseImage: req.files.courseImage[0].path,
+                teacherImage: req.files.teacherImage[0].path,
+                createrCode: req.user.code
+            });
+            res.status(200).send({
+                success: true,
+                message: "Course Created successfully!"
+            });
+        } else {
+            if (req.files.courseImage) {
+                deleteSingleFile(req.files.courseImage[0].path);
+            }
+            if (req.files.teacherImage) {
+                deleteSingleFile(req.files.teacherImage[0].path);
+            }
             return res.status(400).send({
                 success: false,
-                message: "Please..Upload course image!"
+                message: "Please..Upload respected images!"
             });
         }
-        const { category, coursePrice, heading, description, level, language, courseName, lesson, duration, subjects } = req.body;
-        await AdminCourse.create({
-            category: category,
-            courseName: courseName,
-            coursePrice: coursePrice,
-            language: language,
-            lesson: lesson,
-            heading: heading,
-            description: description,
-            level: level,
-            duration: duration,
-            subjects: subjects,
-            courseImage: req.file.path,
-            createrCode: req.user.code
-        });
-        res.status(200).send({
-            success: true,
-            message: "Course Created successfully!"
-        });
     } catch (err) {
         res.status(500).send({
             success: false,
@@ -101,7 +116,7 @@ exports.updateCourse = async (req, res) => {
             console.log(error);
             return res.status(400).send(error.details[0].message);
         }
-        const { category, coursePrice, heading, description, level, language, courseName, lesson, duration, subjects } = req.body;
+        const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;
         const course = await AdminCourse.findOne({
             where: {
                 id: req.params.id
@@ -119,12 +134,14 @@ exports.updateCourse = async (req, res) => {
             courseName: courseName,
             coursePrice: coursePrice,
             language: language,
-            lesson: lesson,
             heading: heading,
             description: description,
             level: level,
             duration: duration,
-            subjects: subjects
+            coupen: coupen,
+            teacherName: teacherName,
+            introVideoLink: introVideoLink,
+            topic: topic
         })
         res.status(200).send({
             success: true,
@@ -176,6 +193,44 @@ exports.updateCourseImage = async (req, res) => {
     }
 };
 
+exports.updateTeacherImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({
+                success: false,
+                message: "Please..Upload course image!"
+            });
+        }
+        const course = await AdminCourse.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        if (!course) {
+            return res.status(400).send({
+                success: false,
+                message: "Course is not present!"
+            });
+        }
+        if (course.teacherImage) {
+            deleteSingleFile(course.teacherImage);
+        }
+        await course.update({
+            ...course,
+            teacherImage: req.file.path
+        })
+        res.status(200).send({
+            success: true,
+            message: "Course Teacher Image updated successfully!"
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
 exports.deleteCourse = async (req, res) => {
     try {
         const course = await AdminCourse.findOne({
@@ -189,17 +244,12 @@ exports.deleteCourse = async (req, res) => {
                 message: "Course is not present!"
             });
         }
-        const notes = await CourseContentNotes.findAll({ where: { courseId: req.params.id } });
-        const notesArray = [];
-        for (let i = 0; i < notes.length; i++) {
-            if (notes[i].note) {
-                notesArray.push(notes[i].note);
-            }
-        }
         if (course.courseImage) {
             deleteSingleFile(course.courseImage);
         }
-        deleteMultiFile(notesArray);
+        if (course.teacherImage) {
+            deleteSingleFile(course.teacherImage);
+        }
         await course.destroy()
         res.status(200).send({
             success: true,

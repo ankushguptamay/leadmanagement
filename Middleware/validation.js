@@ -93,8 +93,8 @@ exports.bookingSlote = (data) => {
     const schema = joi.object().keys({
         date: joi.string().required(),
         time: joi.array().required(),
-        name: joi.string().optional(),
-        phoneNumber: joi.string().optional()
+        priceForIndian: joi.string().required(),
+        priceForNonIndian: joi.string().required()
     });
     return schema.validate(data);
 }
@@ -108,20 +108,19 @@ exports.addAdminCourse = (data) => {
         level: joi.string().required(),
         language: joi.string().required(),
         courseName: joi.string().required(),
-        lesson: joi.string().required(),
-        duration: joi.string().required(),
-        subjects: joi.string().required()
-    });
+        duration: joi.string().required()
+    }).options({ allowUnknown: true });
     return schema.validate(data);
 }
 
 exports.addAdminCourseContent = (data) => {
     const schema = joi.object().keys({
         course: joi.string().required(),
-        subject: joi.string().required(),
+        subject: joi.array().required(),
         videoType: joi.string().required(),
         videoLink: joi.string().required(),
-        videoTitle: joi.string().required()
+        videoTitle: joi.string().required(),
+        courseId: joi.string().required()
     });
     return schema.validate(data);
 }
@@ -190,6 +189,14 @@ exports.appUserLoginOTP = (data) => {
     const schema = joi.object().keys({
         phoneOTP: joi.string().length(6).required(),
         phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
+    });
+    return schema.validate(data);
+}
+
+exports.getSloteForPatientValidation = (data) => {
+    const schema = joi.object().keys({
+        date: joi.string().required(),
+        country: joi.string().required()
     });
     return schema.validate(data);
 }

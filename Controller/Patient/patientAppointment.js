@@ -14,7 +14,7 @@ exports.bookPatientAppointment = async (req, res) => {
         }
         const isSlote = await AppointmentSlote.findOne({
             where: {
-                [Op.and]: [{ id: req.params.sloteId }, { status: null }]
+                [Op.and]: [{ id: req.params.sloteId }, { status: "Available" }]
             }
         })
         if (!isSlote) {
@@ -23,13 +23,14 @@ exports.bookPatientAppointment = async (req, res) => {
                 message: "This slote has allready booked!"
             })
         }
-        const { fullName, gender, age, patientProblem } = req.body;
+        const { fullName, gender, age, patientProblem, phoneNumber } = req.body;
         const patientAppointment = await PatientAppointment.create({
             date: isSlote.date,
             time: isSlote.time,
             fullName: fullName,
             age: age,
             gender: gender,
+            phoneNumber: phoneNumber,
             patientProblem: patientProblem,
             status: 'Booked',
             appointmentSloteId: req.params.sloteId

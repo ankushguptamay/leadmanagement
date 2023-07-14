@@ -1,16 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
-    const CourseContentNotes = sequelize.define("courseContentNote", {
+    const Banner = sequelize.define("banner", {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        note:{
-            type:DataTypes.JSON
+        bannerImage: {
+            type: DataTypes.TEXT
+        },
+        bannerCode: {
+            type: DataTypes.STRING
         }
     })
-    return CourseContentNotes;
+    return Banner;
 }
-// foreign id
-// courseId
-// contentId

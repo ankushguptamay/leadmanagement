@@ -32,6 +32,9 @@ module.exports = (sequelize, DataTypes) => {
         requestType: {
             type: DataTypes.STRING
         },
+        selectedDisease: {
+            type: DataTypes.JSON
+        },
         city: {
             type: DataTypes.STRING
         },
@@ -69,6 +72,12 @@ module.exports = (sequelize, DataTypes) => {
         updaterCode: {
             type: DataTypes.STRING,
             defaultValue: null
+        },
+        reminderDate: {
+            type: DataTypes.DATE
+        },
+        reminderTime: {
+            type: DataTypes.STRING
         }
     }, {
         paranoid: true

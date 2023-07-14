@@ -1,6 +1,6 @@
 const dbConfig = require('../Config/db.Config.js');
 
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = new Sequelize(dbConfig.database, dbConfig.user, dbConfig.password, {
     host: dbConfig.host,
     dialect: dbConfig.dialect,
@@ -28,7 +28,8 @@ db.language = require('./Admin/Master/languageModel.js')(sequelize, Sequelize);
 db.level = require('./Admin/Master/levelModel.js')(sequelize, Sequelize);
 db.medium = require('./Admin/Master/mediumModel.js')(sequelize, Sequelize);
 db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
-db.courseContentNotes = require('./Admin/courseContentNotesModel.js')(sequelize, Sequelize);
+db.banner = require('./Admin/Master/bannerModel.js')(sequelize, Sequelize);
+db.disease = require('./Admin/Master/diseaseModel.js')(sequelize, Sequelize);
 
 // Patient
 db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
@@ -73,6 +74,7 @@ db.previousUpdateRecordEmployees.belongsTo(db.employeesInformation, { foreignKey
 db.appointmentSlote.hasMany(db.patientAppointment, { foreignKey: 'appointmentSloteId', as: 'patientDetail' });
 db.patientAppointment.belongsTo(db.appointmentSlote, { foreignKey: 'appointmentSloteId', as: 'bookingSlote' });
 
+// association bt admin and master
 db.adminInformation.hasMany(db.category, { foreignKey: 'createrCode' });
 db.category.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
@@ -88,6 +90,12 @@ db.level.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 db.adminInformation.hasMany(db.topic, { foreignKey: 'createrCode' });
 db.topic.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
+db.adminInformation.hasMany(db.banner, { foreignKey: 'createrCode' });
+db.banner.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
+db.adminInformation.hasMany(db.disease, { foreignKey: 'createrCode' });
+db.disease.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
+
 // Association bt Course and Student
 db.student.belongsToMany(db.adminCourse, { through: "student_Course", as: 'courses' });
 db.adminCourse.belongsToMany(db.student, { through: "student_Course", as: "students" });
@@ -100,12 +108,6 @@ db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' }
 
 db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent', onDelete: 'cascade' });
 db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
-
-db.adminCourse.hasMany(db.courseContentNotes, { foreignKey: 'courseId', as: "contentNotes" });
-db.courseContentNotes.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: "adminCourse" });
-
-db.adminCourseContent.hasMany(db.courseContentNotes, { foreignKey: 'contentId', as: 'contentNotes', onDelete: 'cascade' });
-db.courseContentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 'content' });
 
 // This many to many relation auto deleteing table after create it.......?
 // db.leadProfile.belongsToMany(
@@ -129,6 +131,30 @@ db.courseContentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId'
 // }
 // );
 
-// queryInterface.removeColumn('adminCourseContents', "contentNotes");
+queryInterface.dropTable("courseContentNotes");
+// queryInterface.addColumn('leadProfiles', 'selectedDisease', { type: DataTypes.JSON });
+// queryInterface.removeColumn('adminCourses', "lesson");
+// queryInterface.removeColumn('adminCourses', "subjects");
+// queryInterface.addColumn('adminCourses', 'teacherName', { type: DataTypes.STRING });
+// queryInterface.addColumn('adminCourses', 'teacherImage', { type: DataTypes.TEXT });
+// queryInterface.addColumn('adminCourses', 'topic', { type: DataTypes.JSON });
+// queryInterface.addColumn('adminCourses', 'coupen', { type: DataTypes.STRING });
+// queryInterface.addColumn('adminCourses', 'introVideoLink', { type: DataTypes.STRING });
+// queryInterface.changeColumn('adminCourseContents', 'subject', { type: DataTypes.JSON });
+// queryInterface.removeColumn('appointmentStoles', "name");
+// queryInterface.removeColumn('appointmentStoles', "phoneNumber");
+// queryInterface.addColumn('appointmentStoles', 'priceForNonIndian', { type: DataTypes.STRING });
+// queryInterface.addColumn('appointmentStoles', 'priceForIndian', { type: DataTypes.STRING });
+// queryInterface.changeColumn('appointmentStoles', 'status', {
+//     type: DataTypes.STRING,
+//     defaultValue:"Available"
+// });
+// queryInterface.addColumn('previousUpdateRecordLeads', 'selectedDisease', { type: DataTypes.JSON });
+// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderDate', { type: DataTypes.DATE });
+// queryInterface.addColumn('previousUpdateRecordLeads', 'reminderTime', { type: DataTypes.STRING });
+// queryInterface.addColumn('leadProfiles', 'reminderDate', { type: DataTypes.DATE });
+// queryInterface.addColumn('leadProfiles', 'reminderTime', { type: DataTypes.STRING });
+
+// queryInterface.addColumn('patientAppointments', 'phoneNumber', { type: DataTypes.STRING, allowNull: false });
 
 module.exports = db;

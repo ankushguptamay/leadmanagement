@@ -1,20 +1,23 @@
 const express = require('express');
 const { registerAdmin, loginAdmin, getAdmin, updateAdminName } = require('../Controller/Admin/authController');
-const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead, deletePreviousLead, getLeadByLeadCode,
-    countLeadByStatusForAdmin, countNewLeadForAdmin } = require('../Controller/Lead/leadProfileController');
+const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLead, deleteAllPreviousLead, getLeadByLeadCode,
+    countLeadByStatusForAdmin, countNewLeadForAdmin, countLeadAssignToUser, getAllPreviousLead, deletePerticularPreviousLead } = require('../Controller/Lead/leadProfileController');
 const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/Lead/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
-const { addCourse, getAllCourse, updateCourse, updateCourseImage, deleteCourse } = require('../Controller/Admin/courseController');
-const { addCourseContent, getCourseContentByCourseId } = require('../Controller/Admin/courseContentController');
-const { addAppointmentSlote, getAppointmentSloteByDate } = require('../Controller/Admin/appointmentSloteController');
+const { addCourse, getAllCourse, updateCourse, updateCourseImage, updateTeacherImage, deleteCourse } = require('../Controller/Admin/courseController');
+const { addCourseContent, getCourseContentByCourseId, updateCourseContent, deleteCourseContent } = require('../Controller/Admin/courseContentController');
+const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote, bookedSloteByDate, availableSlote, deleteSlote } = require('../Controller/Admin/appointmentSloteController');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
 const { addLanguage, getAllLanguage, deleteLanguage } = require('../Controller/Admin/Master/languageController');
 const { addLevel, getAllLevel, deleteLevel } = require('../Controller/Admin/Master/levelController');
 const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/Master/mediumController');
+const { addBanner, getAllBanner, deleteBanner } = require('../Controller/Admin/Master/bannerController');
+const { addDisease, getAllDisease, deleteDisease } = require('../Controller/Admin/Master/diseaseController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
-const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent, getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
+const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent,
+    getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
 
 // middleware
@@ -41,9 +44,12 @@ leadManagement.get("/getLeadByLeadCode/:leadCode", jwt.verifyJWT, isAdminPresent
 leadManagement.put("/updateLeadProfile/:leadCode", jwt.verifyJWT, isAdminPresent, updateLeadProfile);
 leadManagement.post("/restoreLead/:leadCode", jwt.verifyJWT, isAdminPresent, restoreLead);
 leadManagement.delete("/deleteLead/:leadCode", jwt.verifyJWT, isAdminPresent, deleteLead);
-leadManagement.delete("/deletePreviousLead/:leadProfileCode", jwt.verifyJWT, isAdminPresent, deletePreviousLead);
+leadManagement.delete("/deleteAllPreviousLead/:leadProfileCode", jwt.verifyJWT, isAdminPresent, deleteAllPreviousLead);
 leadManagement.get("/countLeadByStatusDashboard", jwt.verifyJWT, isAdminPresent, countLeadByStatusForAdmin);
 leadManagement.get("/countNewLeadDashboard", jwt.verifyJWT, isAdminPresent, countNewLeadForAdmin);
+leadManagement.get("/countLeadAssignToUser/:userCode", jwt.verifyJWT, isAdminPresent, countLeadAssignToUser);
+leadManagement.delete("/deletePerticularPreviousLead/:perviousLeadId", jwt.verifyJWT, isAdminPresent, deletePerticularPreviousLead); // id
+leadManagement.get("/getAllPreviousLead/:leadProfileCode", jwt.verifyJWT, isAdminPresent, getAllPreviousLead);
 
 leadManagement.post("/assignLeadToUser", jwt.verifyJWT, isAdminPresent, assignLeadToUser);
 leadManagement.post("/rollBackAssign", jwt.verifyJWT, isAdminPresent, rollBackAssign);
@@ -55,17 +61,24 @@ leadManagement.get("/deletedEmployeesInformation", jwt.verifyJWT, isAdminPresent
 leadManagement.delete("/deleteEmployees/:employeesCode", jwt.verifyJWT, isAdminPresent, deleteEmployees);
 leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPresent, restoreEmployee);
 
-leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), addCourse);
+leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.fields([{ name: 'courseImage', maxCount: 1 }, { name: 'teacherImage', maxCount: 1 }]), addCourse);
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
 leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), updateCourseImage);
+leadManagement.put("/updateTeacherImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('teacherImage'), updateTeacherImage);
 leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
 leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);
+leadManagement.get("/bookedSlote", jwt.verifyJWT, isAdminPresent, bookedSlote); // work as notification
+leadManagement.get("/bookedSloteByDate", jwt.verifyJWT, isAdminPresent, bookedSloteByDate);
+leadManagement.get("/availableSlote", jwt.verifyJWT, isAdminPresent, availableSlote);
+leadManagement.delete("/deleteSlote/:sloteId", jwt.verifyJWT, isAdminPresent, deleteSlote); // id
 
-leadManagement.post("/addCourseContent/:courseId", jwt.verifyJWT, isAdminPresent, uploadMultiPDF.array('contentNotes', 10), addCourseContent);
+leadManagement.post("/addCourseContent", jwt.verifyJWT, isAdminPresent, addCourseContent);
 leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);
+leadManagement.put("/updateContent/:id", jwt.verifyJWT, isAdminPresent, updateCourseContent);
+leadManagement.delete("/deleteContent/:id", jwt.verifyJWT, isAdminPresent, deleteCourseContent);
 
 leadManagement.post("/addCategory", jwt.verifyJWT, isAdminPresent, uploadImage.single('categoryThumbnail'), addCategory);
 leadManagement.get("/categories", jwt.verifyJWT, isAdminPresent, getAllCategory);
@@ -74,6 +87,15 @@ leadManagement.delete("/deleteCategory/:categoryCode", jwt.verifyJWT, isAdminPre
 leadManagement.post("/addLanguage", jwt.verifyJWT, isAdminPresent, addLanguage);
 leadManagement.get("/languages", jwt.verifyJWT, isAdminPresent, getAllLanguage);
 leadManagement.delete("/deleteLanguage/:languageCode", jwt.verifyJWT, isAdminPresent, deleteLanguage);
+
+leadManagement.post("/addBanner", jwt.verifyJWT, isAdminPresent, uploadImage.single('bannerImage'), addBanner);
+leadManagement.get("/banners", jwt.verifyJWT, isAdminPresent, getAllBanner);
+leadManagement.delete("/deleteBanner/:bannerCode", jwt.verifyJWT, isAdminPresent, deleteBanner);
+
+leadManagement.post("/addDisease", jwt.verifyJWT, isAdminPresent, addDisease);
+leadManagement.get("/diseases", jwt.verifyJWT, isAdminPresent, getAllDisease);
+leadManagement.delete("/deleteDisease/:diseaseCode", jwt.verifyJWT, isAdminPresent, deleteDisease);
+
 
 leadManagement.post("/addLevel", jwt.verifyJWT, isAdminPresent, addLevel);
 leadManagement.get("/levels", jwt.verifyJWT, isAdminPresent, getAllLevel);

@@ -29,13 +29,22 @@ module.exports = (sequelize, DataTypes) => {
         courseImage:{
             type: DataTypes.TEXT
         },
-        lesson:{
-            type: DataTypes.STRING
-        },
         duration:{
             type: DataTypes.STRING
         },
-        subjects:{
+        topic:{
+            type: DataTypes.JSON 
+        },
+        teacherName:{
+            type: DataTypes.STRING
+        },
+        teacherImage:{
+            type: DataTypes.TEXT
+        },
+        coupen:{
+            type: DataTypes.STRING
+        },
+        introVideoLink:{
             type: DataTypes.STRING
         }
     })
