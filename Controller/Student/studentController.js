@@ -263,7 +263,11 @@ exports.searchAndGetActiveStudent = async (req, res) => {
                 order: [
                     ['createdAt', 'DESC'],
                     ["name", "ASC"]
-                ]
+                ],
+                include: [{
+                    model: AdminCourse,
+                    as: 'courses'
+                }]
             });
         } else {
             student = await Student.findAll({
