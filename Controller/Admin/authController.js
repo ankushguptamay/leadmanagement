@@ -7,6 +7,7 @@ const { JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
+const IP = require('ip');
 
 const SALT = 10;
 
@@ -79,6 +80,8 @@ const SALT = 10;
 
 exports.loginAdmin = async (req, res) => {
     try {
+        const ip = IP.address();
+        console.log("IP ADDRESS......."+ip)
         const { error } = adminLogin(req.body);
         if (error) {
             console.log(error);
