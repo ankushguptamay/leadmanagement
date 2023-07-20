@@ -1,13 +1,12 @@
 const db = require('../../Models');
-const Sequelize = require("sequelize");
 const AdminInformation = db.adminInformation;
-const Employee = db.employeesInformation;
 const { adminLogin, adminRegistration } = require("../../Middleware/validation");
-const { JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
+const { JWT_SECRET_KEY, JWT_VALIDITY, ABSTRACT_IP_URL } = process.env;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
 const IP = require('ip');
+const axios = require('axios');
 
 const SALT = 10;
 
@@ -80,8 +79,16 @@ const SALT = 10;
 
 exports.loginAdmin = async (req, res) => {
     try {
+        // client Ip Address and information
         const ip = IP.address();
-        console.log("IP ADDRESS......."+ip)
+        console.log("IP ADDRESS......."+ip);
+        const sendAPIRequest = async (ipAddress) => {
+            const apiResponse = await axios.get(ABSTRACT_IP_URL + "&ip_address=" + ipAddress);
+            return apiResponse.data;
+        }
+        const ipAddressInformation = await sendAPIRequest(ip);
+        console.log(ipAddressInformation);
+
         const { error } = adminLogin(req.body);
         if (error) {
             console.log(error);
