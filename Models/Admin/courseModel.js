@@ -11,40 +11,52 @@ module.exports = (sequelize, DataTypes) => {
         coursePrice: {
             type: DataTypes.STRING
         },
-        heading:{
+        heading: {
             type: DataTypes.STRING
         },
-        description:{
+        description: {
             type: DataTypes.STRING
         },
-        level:{
+        level: {
             type: DataTypes.STRING
         },
-        language:{
+        language: {
             type: DataTypes.STRING
         },
-        courseName:{
+        courseName: {
             type: DataTypes.STRING
         },
-        courseImage:{
-            type: DataTypes.TEXT
+        courseImage_Path: {
+            type: DataTypes.STRING(1234)
         },
-        duration:{
+        courseImage_Name: {
+            type: DataTypes.STRING(1234)
+        },
+        courseImage_FileName: {
+            type: DataTypes.STRING(1234)
+        },
+        duration: {
             type: DataTypes.STRING
         },
-        topic:{
-            type: DataTypes.JSON 
+        topic: {
+            type: DataTypes.JSON
         },
-        teacherName:{
+        teacherName: {
             type: DataTypes.STRING
         },
-        teacherImage:{
-            type: DataTypes.TEXT
+        teacherImage_Path: {
+            type: DataTypes.STRING(1234)
         },
-        coupen:{
+        teacherImage_Name: {
+            type: DataTypes.STRING(1234)
+        },
+        teacherImage_FileName: {
+            type: DataTypes.STRING(1234)
+        },
+        coupen: {
             type: DataTypes.STRING
         },
-        introVideoLink:{
+        introVideoLink: {
             type: DataTypes.STRING
         }
     })

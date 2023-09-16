@@ -175,11 +175,6 @@ exports.getSloteByDateForPatient = async (req, res) => {
 // for admin
 exports.availableSlote = async (req, res) => {
     try {
-        const { error } = bookingSlote(req.body);
-        if (error) {
-            console.log(error);
-            return res.status(400).send(error.details[0].message);
-        }
         const slote = await AppointmentSlote.findAll({
             where: { status: "Available", date: req.query.date }
         });

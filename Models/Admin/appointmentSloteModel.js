@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         status: {
             type: DataTypes.STRING,
-            defaultValue: "Available"
+            defaultValue: "Available" // Available, Booked, Closed
         },
         priceForIndian: {
             type: DataTypes.STRING

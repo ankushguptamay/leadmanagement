@@ -5,8 +5,14 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        bannerImage: {
-            type: DataTypes.TEXT
+        banner_Path: {
+            type: DataTypes.STRING(1234)
+        },
+        banner_Name: {
+            type: DataTypes.STRING(1234)
+        },
+        banner_FileName: {
+            type: DataTypes.STRING(1234)
         },
         bannerCode: {
             type: DataTypes.STRING

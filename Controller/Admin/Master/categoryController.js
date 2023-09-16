@@ -36,7 +36,9 @@ exports.addCategory = async (req, res) => {
         await Category.create({
             category: category,
             categoryCode: code,
-            categoryThumbnail: req.file.path,
+            categoryThumbnail_Path: req.file.path,
+            categoryThumbnail_Name: req.file.originalname,
+            categoryThumbnail_FileName: req.file.filename,
             createrCode: req.user.code
         });
         res.status(200).send({
@@ -84,8 +86,8 @@ exports.deleteCategory = async (req, res) => {
                 message: "Category is not present!"
             });
         }
-        if (category.categoryThumbnail) {
-            deleteSingleFile(category.categoryThumbnail);
+        if (category.categoryThumbnail_Path) {
+            deleteSingleFile(category.categoryThumbnail_Path);
         }
         await category.destroy();
         res.status(200).send({

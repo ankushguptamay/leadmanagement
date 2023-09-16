@@ -11,8 +11,14 @@ module.exports = (sequelize, DataTypes) => {
         categoryCode: {
             type: DataTypes.STRING
         },
-        categoryThumbnail:{
-            type: DataTypes.STRING
+        categoryThumbnail_Name:{
+            type: DataTypes.STRING(1234)
+        },
+        categoryThumbnail_FileName:{
+            type: DataTypes.STRING(1234)
+        },
+        categoryThumbnail_Path:{
+            type: DataTypes.STRING(1234)
         }
     })
     return Category;

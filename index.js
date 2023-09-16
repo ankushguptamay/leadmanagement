@@ -23,6 +23,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+app.use('/courseFile', express.static('./Resource/Course'));
+app.use('/masterFile', express.static('./Resource/Master'));
+
 app.use('/api/user', leadUser);
 app.use('/api/admin', admin);
 app.use('/api/student', student);

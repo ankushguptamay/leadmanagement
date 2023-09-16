@@ -33,8 +33,12 @@ exports.addCourse = async (req, res) => {
                 teacherName: teacherName,
                 introVideoLink: introVideoLink,
                 topic: topic,
-                courseImage: req.files.courseImage[0].path,
-                teacherImage: req.files.teacherImage[0].path,
+                courseImage_Path: req.files.courseImage[0].path,
+                courseImage_Name: req.files.courseImage[0].originalname,
+                courseImage_FileName: req.files.courseImage[0].filename,
+                teacherImage_Path: req.files.teacherImage[0].path,
+                teacherImage_Name: req.files.teacherImage[0].originalname,
+                teacherImage_FileName: req.files.teacherImage[0].filename,
                 createrCode: req.user.code
             });
             res.status(200).send({
@@ -174,12 +178,14 @@ exports.updateCourseImage = async (req, res) => {
                 message: "Course is not present!"
             });
         }
-        if (course.courseImage) {
-            deleteSingleFile(course.courseImage);
+        if (course.courseImage_Path) {
+            deleteSingleFile(course.courseImage_Path);
         }
         await course.update({
             ...course,
-            courseImage: req.file.path
+            courseImage_Path: req.file.path,
+            courseImage_Name: req.file.originalname,
+            courseImage_FileName: req.file.filename
         })
         res.status(200).send({
             success: true,
@@ -212,12 +218,14 @@ exports.updateTeacherImage = async (req, res) => {
                 message: "Course is not present!"
             });
         }
-        if (course.teacherImage) {
-            deleteSingleFile(course.teacherImage);
+        if (course.teacherImage_Path) {
+            deleteSingleFile(course.teacherImage_Path);
         }
         await course.update({
             ...course,
-            teacherImage: req.file.path
+            teacherImage_Path: req.file.path,
+            teacherImage_Name: req.file.originalname,
+            teacherImage_FileName: req.file.filename
         })
         res.status(200).send({
             success: true,
@@ -244,11 +252,11 @@ exports.deleteCourse = async (req, res) => {
                 message: "Course is not present!"
             });
         }
-        if (course.courseImage) {
-            deleteSingleFile(course.courseImage);
+        if (course.courseImage_Path) {
+            deleteSingleFile(course.courseImage_Path);
         }
-        if (course.teacherImage) {
-            deleteSingleFile(course.teacherImage);
+        if (course.teacherImage_Path) {
+            deleteSingleFile(course.teacherImage_Path);
         }
         await course.destroy()
         res.status(200).send({

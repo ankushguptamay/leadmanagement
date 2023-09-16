@@ -131,4 +131,16 @@ db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'p
 // }
 // );
 
+queryInterface.dropTable('student_Courses');
+queryInterface.dropTable('adminCourseContents');
+queryInterface.dropTable('banners');
+queryInterface.dropTable('categories');
+queryInterface.addColumn('adminCourses', "teacherImage_Path", { type: DataTypes.STRING(1234) });
+queryInterface.addColumn('adminCourses', "teacherImage_Name", { type: DataTypes.STRING(1234) });
+queryInterface.addColumn('adminCourses', "teacherImage_FileName", { type: DataTypes.STRING(1234) });
+queryInterface.addColumn('adminCourses', "courseImage_Path", { type: DataTypes.STRING(1234) });
+queryInterface.addColumn('adminCourses', "courseImage_Name", { type: DataTypes.STRING(1234) });
+queryInterface.addColumn('adminCourses', "courseImage_FileName", { type: DataTypes.STRING(1234) });
+queryInterface.removeColumn('adminCourses', "courseImage");
+queryInterface.removeColumn('adminCourses', "teacherImage");
 module.exports = db;

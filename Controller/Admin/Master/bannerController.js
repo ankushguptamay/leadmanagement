@@ -26,7 +26,9 @@ exports.addBanner = async (req, res) => {
         }
         await Banner.create({
             bannerCode: code,
-            bannerImage: req.file.path,
+            banner_Path: req.file.path,
+            banner_Name: req.file.originalname,
+            banner_FileName: req.file.filename,
             createrCode: req.user.code
         });
         res.status(200).send({
@@ -74,8 +76,8 @@ exports.deleteBanner = async (req, res) => {
                 message: "Banner is not present!"
             });
         }
-        if (banner.bannerImage) {
-            deleteSingleFile(banner.bannerImage);
+        if (banner.banner_Path) {
+            deleteSingleFile(banner.banner_Path);
         }
         await banner.destroy();
         res.status(200).send({
