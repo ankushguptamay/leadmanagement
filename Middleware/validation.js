@@ -130,7 +130,8 @@ exports.addPatientAppointment = (data) => {
         fullName: joi.string().min(3).max(30).required(),
         age: joi.string().required(),
         gender: joi.string().required(),
-        patientProblem: joi.string().min(20).max(200).optional()
+        patientProblem: joi.string().min(20).max(200).optional(),
+        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
     });
     return schema.validate(data);
 }

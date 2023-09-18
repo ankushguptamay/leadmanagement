@@ -79,16 +79,6 @@ const SALT = 10;
 
 exports.loginAdmin = async (req, res) => {
     try {
-        // client Ip Address and information
-        const ip = IP.address();
-        console.log("IP ADDRESS......."+ip);
-        const sendAPIRequest = async (ipAddress) => {
-            const apiResponse = await axios.get(ABSTRACT_IP_URL + "&ip_address=" + ipAddress);
-            return apiResponse.data;
-        }
-        const ipAddressInformation = await sendAPIRequest(ip);
-        console.log(ipAddressInformation);
-
         const { error } = adminLogin(req.body);
         if (error) {
             console.log(error);
