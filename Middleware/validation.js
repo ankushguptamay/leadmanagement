@@ -127,45 +127,29 @@ exports.addAdminCourseContent = (data) => {
 
 exports.addPatientAppointment = (data) => {
     const schema = joi.object().keys({
-        fullName: joi.string().min(3).max(30).required(),
-        age: joi.string().required(),
-        gender: joi.string().required(),
+        patientName: joi.string().min(3).max(30).required(),
+        patientAge: joi.string().required(),
+        patientGender: joi.string().required(),
         patientProblem: joi.string().min(20).max(200).optional(),
-        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
+        patientPhoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
     });
     return schema.validate(data);
 }
 
-exports.studentRegistration = (data) => {
+exports.appUserRegistrationByAdmin = (data) => {
     const schema = joi.object().keys({
         name: joi.string().min(3).max(30).required(),
         email: joi.string().email().required().label('Email'),
         phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required(),
-        date: joi.string().required(),
         adminCourseId: joi.string().required()
     });
     return schema.validate(data);
 }
 
-exports.studentLogin = (data) => {
+exports.courseToAppUser = (data) => {
     const schema = joi.object().keys({
-        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
-    });
-    return schema.validate(data);
-}
-
-exports.studentLoginOTP = (data) => {
-    const schema = joi.object().keys({
-        phoneOTP: joi.string().length(6).required(),
-        phoneNumber: joi.string().length(10).pattern(/^[0-9]+$/).required()
-    });
-    return schema.validate(data);
-}
-
-exports.courseToStudent = (data) => {
-    const schema = joi.object().keys({
-        adminCourseId: joi.string().required(),
-        studentId: joi.string().required()
+        appUserId: joi.string().required(),
+        courseId: joi.string().required()
     });
     return schema.validate(data);
 }

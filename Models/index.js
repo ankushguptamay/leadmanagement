@@ -32,9 +32,6 @@ db.banner = require('./Admin/Master/bannerModel.js')(sequelize, Sequelize);
 db.disease = require('./Admin/Master/diseaseModel.js')(sequelize, Sequelize);
 db.appointmentBanner = require('./Admin/Master/appointmentBannerModel.js')(sequelize, Sequelize);
 
-// Patient
-db.patientAppointment = require('./patient/patientAppointmentModel.js')(sequelize, Sequelize);
-
 // Lead
 db.leadProfile = require('./Lead/leadProfileModel.js')(sequelize, Sequelize);
 db.previousUpdateRecordLead = require('./Lead/previousUpdateRecordLeadModel.js')(sequelize, Sequelize);
@@ -47,10 +44,7 @@ db.employeesInformation = require('./Employee/epmloyeesInfoModel.js')(sequelize,
 
 // AppUser
 db.appUser = require('./AppUser/appUserModel.js')(sequelize, Sequelize);
-
-// Student
-db.student = require('./Student/studentModel.js')(sequelize, Sequelize);
-db.student_Course = require('./Student/student_CourseModel.js')(sequelize, Sequelize);
+db.appUser_Course = require('./AppUser/appUser_CourseModel.js')(sequelize, Sequelize);
 
 // Association
 db.adminInformation.hasMany(db.userInformation, { foreignKey: 'createrCode' });
@@ -71,9 +65,6 @@ db.previousUpdateRecordUser.belongsTo(db.userInformation, { foreignKey: 'userInf
 
 db.employeesInformation.hasMany(db.previousUpdateRecordEmployees, { foreignKey: 'employeesInformationCode' });
 db.previousUpdateRecordEmployees.belongsTo(db.employeesInformation, { foreignKey: 'employeesInformationCode' });
-
-db.appointmentSlote.hasMany(db.patientAppointment, { foreignKey: 'appointmentSloteId', as: 'patientDetail' });
-db.patientAppointment.belongsTo(db.appointmentSlote, { foreignKey: 'appointmentSloteId', as: 'bookingSlote' });
 
 // association bt admin and master
 db.adminInformation.hasMany(db.category, { foreignKey: 'createrCode' });
@@ -100,9 +91,12 @@ db.disease.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 db.adminInformation.hasMany(db.appointmentBanner, { foreignKey: 'createrCode' });
 db.appointmentBanner.belongsTo(db.adminInformation, { foreignKey: 'createrCode' });
 
-// Association bt Course and Student
-db.student.belongsToMany(db.adminCourse, { through: "student_Course", as: 'courses' });
-db.adminCourse.belongsToMany(db.student, { through: "student_Course", as: "students" });
+// Association bt Course and AppUser
+db.appUser.hasMany(db.appUser_Course, { foreignKey: 'appUserId', as: 'appUser_Course' });
+db.appUser_Course.belongsTo(db.appUser, { foreignKey: 'appUserId', as: "student" });
+
+db.adminCourse.hasMany(db.appUser_Course, { foreignKey: 'courseId', as: 'appUser_Course' });
+db.appUser_Course.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: "course" });
 
 // Association bt Course, Content And Notes
 db.adminInformation.hasMany(db.adminCourse, { foreignKey: 'createrCode' });

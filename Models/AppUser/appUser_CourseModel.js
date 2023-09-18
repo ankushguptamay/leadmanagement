@@ -1,25 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-    const student = sequelize.define("student", {
+    const AppUser_Course = sequelize.define("appUser_Course", {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true
         },
-        name: {
+        validTill: {
             type: DataTypes.STRING
         },
-        email: {
+        createrCode: {
             type: DataTypes.STRING
-        },
-        phoneNumber: {
-            type: DataTypes.STRING
-        },
-        date: {
-            type: DataTypes.DATEONLY,
-            defaultValue: DataTypes.NOW
         }
     }, {
         paranoid: true
     })
-    return student;
+    return AppUser_Course;
 }
+// studentId
+// adminCourseId

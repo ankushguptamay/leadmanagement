@@ -34,7 +34,9 @@ exports.addAppointmentSlote = async (req, res) => {
                 date: date,
                 time: time[i],
                 priceForIndian: priceForIndian,
-                priceForNonIndian: priceForNonIndian
+                priceForNonIndian: priceForNonIndian,
+                appointmentStatus: "Active",
+                bookingStatus: "Available"
             });
         }
         res.status(200).send({
@@ -52,11 +54,9 @@ exports.addAppointmentSlote = async (req, res) => {
 exports.getAppointmentSloteByDate = async (req, res) => {
     try {
         const slote = await AppointmentSlote.findAll({
-            where: { date: req.query.date },
-            include: [{
-                model: PatientAppointment,
-                as: 'patientDetail'
-            }]
+            where: {
+                date: req.query.date
+            }
         });
         res.status(200).send({
             success: true,
@@ -75,7 +75,7 @@ exports.getAppointmentSloteByDate = async (req, res) => {
 exports.bookedSlote = async (req, res) => {
     try {
         const slote = await AppointmentSlote.findAll({
-            where: { status: "Booked" },
+            where: { appointmentStatus: "Active", bookingStatus: "Booked" },
             include: [{
                 model: PatientAppointment,
                 as: 'patientDetail',
@@ -100,14 +100,11 @@ exports.bookedSlote = async (req, res) => {
 exports.bookedSloteByDate = async (req, res) => {
     try {
         const slote = await AppointmentSlote.findAll({
-            where: { status: "Booked", date: req.query.date },
-            include: [{
-                model: PatientAppointment,
-                as: 'patientDetail',
-                order: [
-                    ['createdAt', 'DESC']
-                ],
-            }]
+            where: {
+                appointmentStatus: "Active",
+                bookingStatus: "Booked",
+                date: req.query.date
+            },
         });
         res.status(200).send({
             success: true,
@@ -151,12 +148,13 @@ exports.getSloteByDateForPatient = async (req, res) => {
             // console.log(country);
             slote = await AppointmentSlote.findAll({
                 where: { date: date },
-                attributes: ["id", "priceForIndian", "date", "time", "status", "createdAt", "updatedAt"]
+                attributes: ["id", "priceForIndian", "date", "time", "appointmentStatus", "bookingStatus", "createdAt", "updatedAt"]
+                // "patientName", "patientAge", "patientPhoneNumber", "patientGender", "patientProblem"
             });
         } else {
             slote = await AppointmentSlote.findAll({
                 where: { date: date },
-                attributes: ["id", "priceForNonIndian", "date", "time", "status", "createdAt", "updatedAt"]
+                attributes: ["id", "priceForNonIndian", "date", "time", "appointmentStatus", "bookingStatus", "createdAt", "updatedAt"]
             });
         }
         res.status(200).send({

@@ -6,12 +6,11 @@ const app = express();
 const bodyParser = require('body-parser');
 const admin = require('./Routes/adminRoute');
 const leadUser = require('./Routes/leadUserRoute');
-const student = require('./Routes/studentRoute');
 const appUser = require('./Routes/appUserRoute');
 const website = require('./Routes/bookSloteWebsiteRoute');
 const db = require('./Models');
 
-db.sequelize.sync()
+db.sequelize.sync({ force: true })
     .then(() => {
         console.log('Database is synced');
     })
@@ -28,7 +27,6 @@ app.use('/masterFile', express.static('./Resource/Master'));
 
 app.use('/api/user', leadUser);
 app.use('/api/admin', admin);
-app.use('/api/student', student);
 app.use('/api/appUser', appUser);
 app.use('/api/website', website);
 

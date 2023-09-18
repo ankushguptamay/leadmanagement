@@ -7,14 +7,16 @@ module.exports = (sequelize, DataTypes) => {
         },
         date: {
             type: DataTypes.DATEONLY,
-            defaultValue: DataTypes.NOW,
-            allowNull: false
+            defaultValue: DataTypes.NOW
         },
         time: {
-            type: DataTypes.STRING,
-            allowNull: false
+            type: DataTypes.STRING
         },
-        status: {
+        appointmentStatus: {
+            type: DataTypes.STRING,
+            defaultValue: "Active" // Deactivate 
+        },
+        bookingStatus: {
             type: DataTypes.STRING,
             defaultValue: "Available" // Available, Booked, Closed
         },
@@ -23,7 +25,26 @@ module.exports = (sequelize, DataTypes) => {
         },
         priceForNonIndian: {
             type: DataTypes.STRING
+        },
+        patientName: {
+            type: DataTypes.STRING
+        },
+        patientAge: {
+            type: DataTypes.STRING
+        },
+        patientGender: {
+            type: DataTypes.STRING
+        },
+        patientProblem: {
+            type: DataTypes.TEXT
+        },
+        patientPhoneNumber: {
+            type: DataTypes.STRING
+        },
+        appUserId: {
+            type: DataTypes.STRING
         }
+
     })
     return AppointmentSlote;
 }

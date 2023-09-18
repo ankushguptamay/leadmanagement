@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
         phoneNumber: {
             type: DataTypes.STRING
         }
+    }, {
+        paranoid: true
     })
     return AppUser;
 }

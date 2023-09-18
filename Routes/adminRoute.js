@@ -15,19 +15,17 @@ const { addMedium, getAllMedium, deleteMedium } = require('../Controller/Admin/M
 const { addBanner, getAllBanner, deleteBanner } = require('../Controller/Admin/Master/bannerController');
 const { addDisease, getAllDisease, deleteDisease } = require('../Controller/Admin/Master/diseaseController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
-const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
 const { addAppointmentBanner, getAllAppointmentBanner, deleteAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
-const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent,
-    getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
+const { addSecondCourseToAppUser, removeCourseFromAppUser } = require('../Controller/AppUser/courseModel');
+const { registerAppUser, getAppUserForAdmin, getAppUserForAdminById, getSoftDeletedAppUser, softDeleteAppUser, restoreAppUser } = require('../Controller/AppUser/appUserController');
 const leadManagement = express.Router();
 
 // middleware
 const jwt = require('../Middleware/verifyJWTToken');
 const { isAdminPresent } = require('../Middleware/isPresent');
 const uploadImage = require('../Middleware/uploadFile/singleImage');
-const uploadMultiPDF = require('../Middleware/uploadFile/multiPDF');
 
-// leadManagement.post("/register", registerAdmin);
+leadManagement.post("/register", registerAdmin);
 leadManagement.post("/login", loginAdmin);
 leadManagement.get("/information", jwt.verifyJWT, getAdmin);
 leadManagement.put("/updateInformation", jwt.verifyJWT, updateAdminName);
@@ -115,16 +113,14 @@ leadManagement.post("/addTopic", jwt.verifyJWT, isAdminPresent, addTopic);
 leadManagement.get("/topics", jwt.verifyJWT, isAdminPresent, getAllTopic);
 leadManagement.delete("/deleteTopic/:topicCode", jwt.verifyJWT, isAdminPresent, deleteTopic);
 
-leadManagement.post("/registerStudent", jwt.verifyJWT, isAdminPresent, registerStudent);
-leadManagement.get("/student", jwt.verifyJWT, isAdminPresent, searchAndGetActiveStudent);
-leadManagement.get("/getDeletedStudent", jwt.verifyJWT, isAdminPresent, getDeletedStudent);
-leadManagement.delete("/deleteStudent/:id", jwt.verifyJWT, isAdminPresent, deleteStudent); // id= studentId
-leadManagement.post("/restoreStudent/:id", jwt.verifyJWT, isAdminPresent, restoreStudent); // id= studentId
-leadManagement.get("/getStudent/:id", jwt.verifyJWT, isAdminPresent, getStudentForAdminById); // id= studentId
-leadManagement.post("/addSecondCourseToStudent", jwt.verifyJWT, isAdminPresent, addSecondCourseToStudent);
-leadManagement.delete("/removeCourseFromStudent/:id", jwt.verifyJWT, isAdminPresent, removeCourseFromStudent); // id= course_studentId
-
-leadManagement.get("/getAppUserForAdmin", jwt.verifyJWT, isAdminPresent, getAppUserForAdmin);
+leadManagement.post("/registerAppUser", jwt.verifyJWT, isAdminPresent, registerAppUser);
+leadManagement.get("/getSoftDeletedAppUser", jwt.verifyJWT, isAdminPresent, getSoftDeletedAppUser);
+leadManagement.get("/getAppUser/:id", jwt.verifyJWT, isAdminPresent, getAppUserForAdminById);
+leadManagement.delete("/deleteAppUser/:id", jwt.verifyJWT, isAdminPresent, softDeleteAppUser);
+leadManagement.post("/restoreAppUser/:id", jwt.verifyJWT, isAdminPresent, restoreAppUser);
+leadManagement.post("/addSecondCourseToAppUser", jwt.verifyJWT, isAdminPresent, addSecondCourseToAppUser);
+leadManagement.delete("/removeCourseFromAppUser/:id", jwt.verifyJWT, isAdminPresent, removeCourseFromAppUser);
+leadManagement.get("/getAppUser", jwt.verifyJWT, isAdminPresent, getAppUserForAdmin);
 
 leadManagement.post("/createLeadFromOutSource", createLead); // social media
 
