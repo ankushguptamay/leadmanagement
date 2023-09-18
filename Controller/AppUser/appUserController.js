@@ -179,18 +179,28 @@ exports.loginAppUser = async (req, res) => {
             });
         }
         // Sending OTP to mobile number
-        const countryCode = "+91";
-        await twilio.verify.v2
-            .services(TWILIO_SERVICE_SID)
-            .verifications
-            .create({
-                to: `${countryCode}${phoneNumber}`,
-                channel: 'sms'
-            });
+        // const countryCode = "+91";
+        // await twilio.verify.v2
+        //     .services(TWILIO_SERVICE_SID)
+        //     .verifications
+        //     .create({
+        //         to: `${countryCode}${phoneNumber}`,
+        //         channel: 'sms'
+        //     });
+        const data = {
+            id: isAppUser.id,
+            email: isAppUser.email
+        }
+        const authToken = jwt.sign(
+            data,
+            JWT_SECRET_KEY,
+            { expiresIn: JWT_VALIDITY } // five day
+        );
         res.status(200).send({
             success: true,
-            message: `OTP sent to registerd Contact number! vallid till 2 min!`,
-            data: { phoneNumber: phoneNumber }
+            message: "User Loged in successfully!", //`OTP sent to registerd Contact number! vallid till 2 min!`,
+            data: { phoneNumber: phoneNumber },
+            authToken: authToken
         });
     } catch (err) {
         res.status(500).send({

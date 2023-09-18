@@ -4,6 +4,11 @@ const AppUser_Course = db.appUser_Course;
 const AdminCourse = db.adminCourse;
 const { courseToAppUser } = require('../../Middleware/validation');
 
+// getAssignCourse for appUser
+// addSecondCourseToAppUser for admin
+// removeCourseFromAppUser for admin
+// purchaseCourse for appUser
+
 exports.getAssignCourse = async (req, res) => {
     try {
         const course = await AppUser_Course.findAll({
@@ -68,6 +73,25 @@ exports.removeCourseFromAppUser = async (req, res) => {
             message: "Course Remove from App User successfully!"
         });
 
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.purchaseCourse = async (req, res) => {
+    try {
+        await AppUser_Course.create({
+            createrCode: req.user.code,
+            courseId: courseId,
+            appUserId: req.appUser.id
+        });
+        res.status(200).send({
+            success: true,
+            message: "Course Assigned to App User successfully!"
+        });
     } catch (err) {
         res.status(500).send({
             success: false,

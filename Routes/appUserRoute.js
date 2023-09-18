@@ -3,8 +3,10 @@ const { register, loginAppUser, verifyLoginOtp, getAppUserForAppUser } = require
 const { getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
 const { getAllBanner } = require('../Controller/Admin/Master/bannerController');
 const { getAllCategory } = require('../Controller/Admin/Master/categoryController');
+const { getAllAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
 const { getSloteByDateForPatient } = require('../Controller/Admin/appointmentSloteController');
 const { bookAppUserAppointment, getMyBookedAppointment } = require('../Controller/AppUser/appointmentController');
+const { purchaseCourse, getAssignCourse } = require('../Controller/AppUser/courseModel');
 const appUser = express.Router();
 
 // middleware
@@ -23,7 +25,11 @@ appUser.post("/bookAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent
 appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getSloteByDateForPatient);
 appUser.get("/myBookedAppointment", jwt.verifyAppUserJWT, isAppUserPresent, getMyBookedAppointment);
 
+appUser.get("/getAllAppointmentBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllAppointmentBanner);
 appUser.get("/getAllCategory", jwt.verifyAppUserJWT, isAppUserPresent, getAllCategory);
 appUser.get("/getAllBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllBanner);
+
+appUser.get("/getAssignCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAssignCourse);
+appUser.post("/purchaseCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, purchaseCourse);
 
 module.exports = appUser;

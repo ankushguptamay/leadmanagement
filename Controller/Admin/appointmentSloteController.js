@@ -174,7 +174,7 @@ exports.getSloteByDateForPatient = async (req, res) => {
 exports.availableSlote = async (req, res) => {
     try {
         const slote = await AppointmentSlote.findAll({
-            where: { status: "Available", date: req.query.date }
+            where: { bookingStatus: "Available", date: req.query.date }
         });
         res.status(200).send({
             success: true,
