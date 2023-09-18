@@ -3,6 +3,7 @@ const { Op } = require("sequelize");
 const { addAdminCourse } = require("../../Middleware/validation");
 const { deleteSingleFile } = require("../../Util/deleteFile")
 const AdminCourse = db.adminCourse;
+const AdminCourseContent = db.adminCourseContent;
 
 exports.addCourse = async (req, res) => {
     try {
@@ -85,32 +86,38 @@ exports.getAllCourse = async (req, res) => {
     }
 };
 
-// exports.getCourseById = async (req, res) => {
-//     try {
-//         const course = await AdminCourse.findOne({
-//             where: {
-//                 id: req.params.id
-//             },
-//             include: [{
-//                 model: AdminCourseContent,
-//                 as: 'courseContent',
-//                 order: [
-//                     ['createdAt', 'ASC']
-//                 ]
-//             }]
-//         });
-//         res.status(200).send({
-//             success: true,
-//             message: "course fetched successfully!",
-//             data: course
-//         });
-//     } catch (err) {
-//         res.status(500).send({
-//             success: false,
-//             message: err.message
-//         });
-//     }
-// };
+exports.getCourseById = async (req, res) => {
+    try {
+        const course = await AdminCourse.findOne({
+            where: {
+                id: req.params.id
+            },
+            include: [{
+                model: AdminCourseContent,
+                as: 'courseContent',
+                order: [
+                    ['createdAt', 'ASC']
+                ]
+            }]
+        });
+        if (!course) {
+            return res.status(400).send({
+                success: false,
+                message: "Course is not present!"
+            });
+        }
+        res.status(200).send({
+            success: true,
+            message: "course fetched successfully!",
+            data: course
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
 
 exports.updateCourse = async (req, res) => {
     try {

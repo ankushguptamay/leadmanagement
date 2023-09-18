@@ -5,7 +5,7 @@ const { createLead, getAllLeadByStatus, updateLeadProfile, deleteLead, restoreLe
 const { registerUser, users, deleteUser, restoreUser, searchUser, deletedUsers } = require('../Controller/Lead/userInformationCont');
 const { assignLeadToUser, rollBackAssign } = require('../Controller/Lead/assignLeadController');
 const { allEmployeesInformation, registerEmployee, deleteEmployees, deletedEmployeesInformation, searchEmployees, restoreEmployee } = require('../Controller/Employee/employeesController');
-const { addCourse, getAllCourse, updateCourse, updateCourseImage, updateTeacherImage, deleteCourse } = require('../Controller/Admin/courseController');
+const { addCourse, getAllCourse, updateCourse, updateCourseImage, updateTeacherImage, deleteCourse, getCourseById } = require('../Controller/Admin/courseController');
 const { addCourseContent, getCourseContentByCourseId, updateCourseContent, deleteCourseContent } = require('../Controller/Admin/courseContentController');
 const { addAppointmentSlote, getAppointmentSloteByDate, bookedSlote, bookedSloteByDate, availableSlote, deleteSlote } = require('../Controller/Admin/appointmentSloteController');
 const { addCategory, getAllCategory, deleteCategory } = require('../Controller/Admin/Master/categoryController');
@@ -63,6 +63,7 @@ leadManagement.post("/restoreEmployee/:employeesCode", jwt.verifyJWT, isAdminPre
 
 leadManagement.post("/addCourse", jwt.verifyJWT, isAdminPresent, uploadImage.fields([{ name: 'courseImage', maxCount: 1 }, { name: 'teacherImage', maxCount: 1 }]), addCourse);
 leadManagement.get("/allCourse", jwt.verifyJWT, isAdminPresent, getAllCourse);
+leadManagement.get("/getCourse/:id", jwt.verifyJWT, isAdminPresent, getCourseById);
 leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('courseImage'), updateCourseImage);
 leadManagement.put("/updateTeacherImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('teacherImage'), updateTeacherImage);
 leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
