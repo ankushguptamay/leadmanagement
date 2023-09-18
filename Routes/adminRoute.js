@@ -16,6 +16,7 @@ const { addBanner, getAllBanner, deleteBanner } = require('../Controller/Admin/M
 const { addDisease, getAllDisease, deleteDisease } = require('../Controller/Admin/Master/diseaseController');
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { getAppUserForAdmin } = require('../Controller/AppUser/appUserController');
+const { addAppointmentBanner, getAllAppointmentBanner, deleteAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
 const { registerStudent, deleteStudent, getDeletedStudent, searchAndGetActiveStudent, restoreStudent,
     getStudentForAdminById, addSecondCourseToStudent, removeCourseFromStudent } = require('../Controller/Student/studentController');
 const leadManagement = express.Router();
@@ -92,6 +93,10 @@ leadManagement.delete("/deleteLanguage/:languageCode", jwt.verifyJWT, isAdminPre
 leadManagement.post("/addBanner", jwt.verifyJWT, isAdminPresent, uploadImage.single('bannerImage'), addBanner);
 leadManagement.get("/banners", jwt.verifyJWT, isAdminPresent, getAllBanner);
 leadManagement.delete("/deleteBanner/:bannerCode", jwt.verifyJWT, isAdminPresent, deleteBanner);
+
+leadManagement.post("/addAppintmentBanner", jwt.verifyJWT, isAdminPresent, uploadImage.single('appointmentBannerImage'), addAppointmentBanner);
+leadManagement.get("/appointmentBanners", jwt.verifyJWT, isAdminPresent, getAllAppointmentBanner);
+leadManagement.delete("/deleteAppointmentBanner/:appointmentBannerCode", jwt.verifyJWT, isAdminPresent, deleteAppointmentBanner);
 
 leadManagement.post("/addDisease", jwt.verifyJWT, isAdminPresent, addDisease);
 leadManagement.get("/diseases", jwt.verifyJWT, isAdminPresent, getAllDisease);
