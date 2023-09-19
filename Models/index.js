@@ -136,8 +136,8 @@ db.contentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 
 // }
 // );
 
-queryInterface.addColumn('appUsers', "profileImage_Path", { type: DataTypes.STRING(1234) });
-queryInterface.addColumn('appUsers', "profileImage_Name", { type: DataTypes.STRING(1234) });
-queryInterface.addColumn('appUsers', "profileImage_FileName", { type: DataTypes.STRING(1234) });
+// queryInterface.addColumn('appUsers', "profileImage_Path", { type: DataTypes.STRING(1234) });
+// queryInterface.addColumn('appUsers', "profileImage_Name", { type: DataTypes.STRING(1234) });
+// queryInterface.addColumn('appUsers', "profileImage_FileName", { type: DataTypes.STRING(1234) });
 
 module.exports = db;
