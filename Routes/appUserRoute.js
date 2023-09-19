@@ -1,6 +1,7 @@
 const express = require('express');
 const { register, loginAppUser, verifyLoginOtp, getAppUserForAppUser, addOrUpdateProfileImage, removeProfileImage } = require('../Controller/AppUser/appUserController');
-const { getAllCourse, getCourseById } = require('../Controller/Admin/courseController');
+const { getAllCourse, getCourseContentForAppUser } = require('../Controller/Admin/courseController');
+const { getNoteByContent } = require('../Controller/Admin/contentNotesController');
 const { getAllBanner } = require('../Controller/Admin/Master/bannerController');
 const { getAllCategory } = require('../Controller/Admin/Master/categoryController');
 const { getAllAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
@@ -12,7 +13,7 @@ const appUser = express.Router();
 // middleware
 const jwt = require('../Middleware/verifyJWTToken');
 const { isAppUserPresent } = require('../Middleware/isPresent');
-const uploadImage = require('../Middleware/uploadFile/singleImage');
+const uploadImage = require('../Middleware/uploadFile/uploadImage');
 
 appUser.post("/register", register);
 appUser.post("/login", loginAppUser);
@@ -22,7 +23,8 @@ appUser.post("/addOrUpdateProfileImage", jwt.verifyAppUserJWT, isAppUserPresent,
 appUser.delete("/removeProfileImage", jwt.verifyAppUserJWT, isAppUserPresent, removeProfileImage);
 
 appUser.get("/getAllCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAllCourse);
-appUser.get("/getCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseById);
+appUser.get("/getCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseContentForAppUser);
+appUser.get("/getNotes/:id", jwt.verifyAppUserJWT, isAppUserPresent, getNoteByContent);
 
 appUser.post("/bookAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookAppUserAppointment);
 appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getSloteByDateForPatient);

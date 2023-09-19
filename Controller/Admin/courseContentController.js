@@ -1,8 +1,9 @@
 const db = require('../../Models');
 const { Op } = require("sequelize");
 const { addAdminCourseContent } = require("../../Middleware/validation");
+const { deleteSingleFile } = require('../../Util/deleteFile');
 const AdminCourseContent = db.adminCourseContent;
-const Student_Course = db.student_Course;
+const ContentNote = db.contentNotes;
 
 exports.addCourseContent = async (req, res) => {
     try {
@@ -49,43 +50,6 @@ exports.getCourseContentByCourseId = async (req, res) => {
             message: "Course content fetched successfully!",
             data: content
         });
-    } catch (err) {
-        res.status(500).send({
-            success: false,
-            message: err.message
-        });
-    }
-};
-
-// for student/public
-exports.getCourseContentByCourseIdForStudent = async (req, res) => {
-    try {
-        const courseId = req.params.courseId;
-        const studentId = req.student.id;
-        const isCourse = await Student_Course.findOne({
-            where: {
-                studentId: studentId,
-                adminCourseId: courseId
-            }
-        });
-        if (!isCourse) {
-            res.status(400).send({
-                success: false,
-                message: "You can't access this course!"
-            });
-        } else {
-            const content = await AdminCourseContent.findAll({
-                where: { courseId: courseId },
-                order: [
-                    ['createdAt', 'ASC']
-                ]
-            });
-            res.status(200).send({
-                success: true,
-                message: "Course content fetched successfully!",
-                data: content
-            });
-        }
     } catch (err) {
         res.status(500).send({
             success: false,
@@ -141,12 +105,30 @@ exports.deleteCourseContent = async (req, res) => {
             where: {
                 id: req.params.id
             }
-        })
+        });
         if (!adminCourseContent) {
             return res.status(400).send({
                 success: true,
                 message: "Course Content is not present!"
             });
+        }
+        // delete file and note
+        const notes = await ContentNote.findAll({
+            where: {
+                contentId: req.params.id
+            }
+        });
+        if (notes.length > 0) {
+            for (let i = 0; i < notes.length; i++) {
+                if (notes[i].note_Path) {
+                    deleteSingleFile(notes[i].note_Path);
+                }
+                await ContentNote.destroy({
+                    where: {
+                        id: notes[i].id
+                    }
+                })
+            }
         }
         await adminCourseContent.destroy();
         res.status(200).send({

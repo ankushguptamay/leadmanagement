@@ -31,6 +31,7 @@ db.topic = require('./Admin/Master/topicModel.js')(sequelize, Sequelize);
 db.banner = require('./Admin/Master/bannerModel.js')(sequelize, Sequelize);
 db.disease = require('./Admin/Master/diseaseModel.js')(sequelize, Sequelize);
 db.appointmentBanner = require('./Admin/Master/appointmentBannerModel.js')(sequelize, Sequelize);
+db.contentNotes = require('./Admin/courseContentNotesModel.js')(sequelize, Sequelize);
 
 // Lead
 db.leadProfile = require('./Lead/leadProfileModel.js')(sequelize, Sequelize);
@@ -106,6 +107,12 @@ db.adminInformation.hasMany(db.adminCourseContent, { foreignKey: 'createrCode' }
 
 db.adminCourse.hasMany(db.adminCourseContent, { foreignKey: 'courseId', as: 'courseContent', onDelete: 'cascade' });
 db.adminCourseContent.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
+
+db.adminCourse.hasMany(db.contentNotes, { foreignKey: 'courseId', as: 'contentNotes', onDelete: 'cascade' });
+db.contentNotes.belongsTo(db.adminCourse, { foreignKey: 'courseId', as: 'parentCourse' });
+
+db.adminCourseContent.hasMany(db.contentNotes, { foreignKey: 'contentId', as: 'contentNotes', onDelete: 'cascade' });
+db.contentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 'parentContent' });
 
 // This many to many relation auto deleteing table after create it.......?
 // db.leadProfile.belongsToMany(

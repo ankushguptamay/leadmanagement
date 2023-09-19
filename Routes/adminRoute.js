@@ -17,13 +17,15 @@ const { addDisease, getAllDisease, deleteDisease } = require('../Controller/Admi
 const { addTopic, getAllTopic, deleteTopic } = require('../Controller/Admin/Master/topicController');
 const { addAppointmentBanner, getAllAppointmentBanner, deleteAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
 const { addSecondCourseToAppUser, removeCourseFromAppUser } = require('../Controller/AppUser/courseModel');
+const { addContentNotes, deleteNote, getNoteByContent } = require('../Controller/Admin/contentNotesController');
 const { registerAppUser, getAppUserForAdmin, getAppUserForAdminById, getSoftDeletedAppUser, softDeleteAppUser, restoreAppUser } = require('../Controller/AppUser/appUserController');
 const leadManagement = express.Router();
 
 // middleware
 const jwt = require('../Middleware/verifyJWTToken');
 const { isAdminPresent } = require('../Middleware/isPresent');
-const uploadImage = require('../Middleware/uploadFile/singleImage');
+const uploadImage = require('../Middleware/uploadFile/uploadImage');
+const uploadPDF = require('../Middleware/uploadFile/uploadPDF');
 
 // leadManagement.post("/register", registerAdmin);
 leadManagement.post("/login", loginAdmin);
@@ -67,6 +69,9 @@ leadManagement.put("/updateCourseImage/:id", jwt.verifyJWT, isAdminPresent, uplo
 leadManagement.put("/updateTeacherImage/:id", jwt.verifyJWT, isAdminPresent, uploadImage.single('teacherImage'), updateTeacherImage);
 leadManagement.put("/updateCourse/:id", jwt.verifyJWT, isAdminPresent, updateCourse);
 leadManagement.delete("/deleteCourse/:id", jwt.verifyJWT, isAdminPresent, deleteCourse);
+leadManagement.post("/addNotes", jwt.verifyJWT, isAdminPresent, uploadPDF.array('contentNotes', 12), addContentNotes);
+leadManagement.delete("/deleteNote/:id", jwt.verifyJWT, isAdminPresent, deleteNote);
+leadManagement.get("/getNote/:id", jwt.verifyJWT, isAdminPresent, getNoteByContent);
 
 leadManagement.post("/addAppointmentSlote", jwt.verifyJWT, isAdminPresent, addAppointmentSlote);
 leadManagement.get("/getAppointmentSloteByDate", jwt.verifyJWT, isAdminPresent, getAppointmentSloteByDate);

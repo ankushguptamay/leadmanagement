@@ -4,6 +4,8 @@ const { addAdminCourse } = require("../../Middleware/validation");
 const { deleteSingleFile } = require("../../Util/deleteFile")
 const AdminCourse = db.adminCourse;
 const AdminCourseContent = db.adminCourseContent;
+const ContentNote = db.contentNotes;
+const AppUser_Course = db.appUser_Course;
 
 exports.addCourse = async (req, res) => {
     try {
@@ -259,6 +261,39 @@ exports.deleteCourse = async (req, res) => {
                 message: "Course is not present!"
             });
         }
+        // delete file and note
+        const notes = await ContentNote.findAll({
+            where: {
+                courseId: req.params.id
+            }
+        });
+        if (notes.length > 0) {
+            for (let i = 0; i < notes.length; i++) {
+                if (notes[i].note_Path) {
+                    deleteSingleFile(notes[i].note_Path);
+                }
+                await ContentNote.destroy({
+                    where: {
+                        id: notes[i].id
+                    }
+                })
+            }
+        }
+        // delete all content
+        const content = await AdminCourseContent.findAll({
+            where: {
+                courseId: req.params.id
+            }
+        });
+        if (content.length > 0) {
+            for (let i = 0; i < content.length; i++) {
+                await AdminCourseContent.destroy({
+                    where: {
+                        id: content[i].id
+                    }
+                });
+            }
+        }
         if (course.courseImage_Path) {
             deleteSingleFile(course.courseImage_Path);
         }
@@ -270,6 +305,49 @@ exports.deleteCourse = async (req, res) => {
             success: true,
             message: "Course deleted successfully!"
         });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};
+
+// for appUser
+exports.getCourseContentForAppUser = async (req, res) => {
+    try {
+        const courseId = req.params.id;
+        const appUserId = req.appUser.id;
+        const isCourse = await AppUser_Course.findOne({
+            where: {
+                courseId: courseId,
+                appUserId: appUserId
+            }
+        });
+        if (!isCourse) {
+            res.status(400).send({
+                success: false,
+                message: "You can't access this course!"
+            });
+        } else {
+            const course = await AdminCourse.findOne({
+                where: {
+                    id: req.params.id
+                },
+                include: [{
+                    model: AdminCourseContent,
+                    as: 'courseContent',
+                    order: [
+                        ['createdAt', 'ASC']
+                    ]
+                }]
+            });
+            res.status(200).send({
+                success: true,
+                message: "Course content fetched successfully!",
+                data: course
+            });
+        }
     } catch (err) {
         res.status(500).send({
             success: false,
