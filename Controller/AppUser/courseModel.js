@@ -38,7 +38,7 @@ exports.addSecondCourseToAppUser = async (req, res) => {
         // Validate body
         const { error } = courseToAppUser(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { courseId, appUserId } = req.body;
@@ -84,13 +84,13 @@ exports.removeCourseFromAppUser = async (req, res) => {
 exports.purchaseCourse = async (req, res) => {
     try {
         await AppUser_Course.create({
-            createrCode: req.user.code,
+            createrCode: null,
             courseId: courseId,
             appUserId: req.appUser.id
         });
         res.status(200).send({
             success: true,
-            message: "Course Assigned to App User successfully!"
+            message: "Course purchaseed successfully!"
         });
     } catch (err) {
         res.status(500).send({

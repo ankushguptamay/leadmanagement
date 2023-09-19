@@ -9,7 +9,7 @@ exports.assignLeadToUser = async (req, res) => {
         // Validate body
         const { error } = assignLeadToUser(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         let count = 0;
@@ -59,7 +59,7 @@ exports.rollBackAssign = async (req, res) => {
         // Validate body
         const { error } = rollBackAssign(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const leadCode = req.body.leadProfileCode;

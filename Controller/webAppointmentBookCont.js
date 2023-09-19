@@ -8,7 +8,7 @@ exports.bookWebSiteAppointment = async (req, res) => {
         // Validate body
         const { error } = addPatientAppointment(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const isSlote = await AppointmentSlote.findOne({

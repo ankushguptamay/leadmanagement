@@ -8,17 +8,17 @@ const AdminCourseContent = db.adminCourseContent;
 exports.addCourse = async (req, res) => {
     try {
         // Validate body
-        const { error } = addAdminCourse(req.body);
-        if (error) {
-            if (req.files.courseImage) {
-                deleteSingleFile(req.files.courseImage[0].path);
-            }
-            if (req.files.teacherImage) {
-                deleteSingleFile(req.files.teacherImage[0].path);
-            }
-            console.log(error);
-            return res.status(400).send(error.details[0].message);
-        }
+        // const { error } = addAdminCourse(req.body);
+        // if (error) {
+        //     if (req.files.courseImage) {
+        //         deleteSingleFile(req.files.courseImage[0].path);
+        //     }
+        //     if (req.files.teacherImage) {
+        //         deleteSingleFile(req.files.teacherImage[0].path);
+        //     }
+        //     console.log(error);
+        //     return res.status(400).send(error.details[0].message);
+        // }
         const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;
         if (req.files.courseImage && req.files.teacherImage) {
             await AdminCourse.create({
@@ -124,7 +124,7 @@ exports.updateCourse = async (req, res) => {
         // Validate body
         const { error } = addAdminCourse(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;

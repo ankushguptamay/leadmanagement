@@ -15,7 +15,7 @@ exports.registerEmployee = async (req, res) => {
         // Validate body
         const { error } = employeeRegistration(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         // Checking is mobile number and Email allready present

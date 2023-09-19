@@ -1,6 +1,6 @@
 const db = require('../../../Models');
 const AppointmentBanner = db.appointmentBanner;
-const { deleteSingleFile } = require('../../../Util/deleteFile')
+const { deleteSingleFile } = require('../../../Util/deleteFile');
 
 exports.addAppointmentBanner = async (req, res) => {
     try {

@@ -13,6 +13,15 @@ module.exports = (sequelize, DataTypes) => {
         },
         phoneNumber: {
             type: DataTypes.STRING
+        },
+        profileImage_Path: { 
+            type: DataTypes.STRING(1234)
+        },
+        profileImage_Name: { 
+            type: DataTypes.STRING(1234)
+        },
+        profileImage_FileName: { 
+            type: DataTypes.STRING(1234)
         }
     }, {
         paranoid: true

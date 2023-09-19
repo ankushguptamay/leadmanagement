@@ -9,7 +9,7 @@ exports.addAppointmentSlote = async (req, res) => {
         // Validate body
         const { error } = bookingSlote(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { date, time, priceForIndian, priceForNonIndian } = req.body;
@@ -124,7 +124,7 @@ exports.getSloteByDateForPatient = async (req, res) => {
         // validation
         const { error } = getSloteForPatientValidation(req.query);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { date, country } = req.query;

@@ -4,6 +4,7 @@ const { Op } = require("sequelize");
 const AppUser_Course = db.appUser_Course;
 const AppUser = db.appUser;
 const jwt = require("jsonwebtoken");
+const { deleteSingleFile } = require('../../Util/deleteFile')
 const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_SERVICE_SID, JWT_SECRET_KEY, JWT_VALIDITY } = process.env;
 
 const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
@@ -14,6 +15,8 @@ const twilio = require("twilio")(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, {
 // getAppUserForAppUser for appUser
 // loginAppUser for appUser
 // verifyLoginOtp for appUser
+// addOrUpdateProfileImage for appUser
+// removeProfileImage for appUser
 
 // registerAppUser for admin
 // getAppUserForAdmin for admin
@@ -27,7 +30,7 @@ exports.register = async (req, res) => {
         // Validate body
         const { error } = appUserRegistration(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         // Checking is Email allready present
@@ -92,7 +95,7 @@ exports.registerAppUser = async (req, res) => {
         // Validate body
         const { error } = appUserRegistrationByAdmin(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         // Checking is Email allready present
@@ -162,7 +165,7 @@ exports.loginAppUser = async (req, res) => {
         // Validate body
         const { error } = appUserLogin(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         // Checking is mobile number present or not
@@ -215,7 +218,7 @@ exports.verifyLoginOtp = async (req, res) => {
         // Validate body
         const { error } = appUserLoginOTP(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { phoneNumber, phoneOTP } = req.body;
@@ -411,6 +414,70 @@ exports.restoreAppUser = async (req, res) => {
             message: "App user restored successfully!"
         });
 
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.addOrUpdateProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({
+                success: false,
+                message: "Please select a profile image!"
+            });
+        }
+        const appUser = await AppUser.findOne({
+            where: {
+                id: req.appUser.id
+            }
+        });
+        let message = "Profile Image uploaded successfully!";
+        if (appUser.profileImage_Path) {
+            deleteSingleFile(appUser.profileImage_Path);
+            message = "Profile Image updated successfully!";
+        }
+        await appUser.update({
+            ...appUser,
+            profileImage_Path: req.file.path,
+            profileImage_Name: req.file.originalname,
+            profileImage_FileName: req.file.filename
+        });
+        res.status(200).send({
+            success: true,
+            message: message
+        });
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+exports.removeProfileImage = async (req, res) => {
+    try {
+        const appUser = await AppUser.findOne({
+            where: {
+                id: req.appUser.id
+            }
+        });
+        if (appUser.profileImage_Path) {
+            deleteSingleFile(appUser.profileImage_Path);
+        }
+        await appUser.update({
+            ...appUser,
+            profileImage_Path: null,
+            profileImage_Name: null,
+            profileImage_FileName: null
+        });
+        res.status(200).send({
+            success: true,
+            message: "Profile Image removed successfully!"
+        });
     } catch (err) {
         res.status(500).send({
             success: false,

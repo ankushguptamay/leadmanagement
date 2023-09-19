@@ -24,6 +24,7 @@ app.use(cors());
 
 app.use('/courseFile', express.static('./Resource/Course'));
 app.use('/masterFile', express.static('./Resource/Master'));
+app.use('/profileImage', express.static('./Resource/AppUser'));
 
 app.use('/api/user', leadUser);
 app.use('/api/admin', admin);

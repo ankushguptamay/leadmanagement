@@ -5,7 +5,7 @@ const { JWT_SECRET_KEY, JWT_VALIDITY, ABSTRACT_IP_URL } = process.env;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { Op } = require("sequelize");
-const IP = require('ip');
+// const IP = require('ip');
 const axios = require('axios');
 
 const SALT = 10;
@@ -81,7 +81,7 @@ exports.loginAdmin = async (req, res) => {
     try {
         const { error } = adminLogin(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const admin = await AdminInformation.findOne({

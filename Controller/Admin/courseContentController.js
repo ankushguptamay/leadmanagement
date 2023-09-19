@@ -9,7 +9,7 @@ exports.addCourseContent = async (req, res) => {
         // Validate body
         const { error } = addAdminCourseContent(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const { videoTitle, videoLink, videoType, course, subject, courseId } = req.body;
@@ -100,7 +100,7 @@ exports.updateCourseContent = async (req, res) => {
         // Validate body
         const { error } = addAdminCourseContent(req.body);
         if (error) {
-            console.log(error);
+            // console.log(error);
             return res.status(400).send(error.details[0].message);
         }
         const adminCourseContent = await AdminCourseContent.findOne({
