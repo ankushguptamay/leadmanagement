@@ -110,7 +110,7 @@ exports.registerAppUser = async (req, res) => {
             });
         }
         // check in paranoid deleted
-        const checkSoftDelete = await Student.findOne({
+        const checkSoftDelete = await AppUser.findOne({
             where: {
                 email: req.body.email
             },
@@ -123,7 +123,7 @@ exports.registerAppUser = async (req, res) => {
                 data: checkSoftDelete
             });
         }
-        // Creating Student Information
+        // Creating Appuser Information
         const newAppUser = await AppUser.create({
             name: name,
             email: email,
@@ -210,7 +210,6 @@ exports.loginAppUser = async (req, res) => {
     }
 }
 
-// for student
 exports.verifyLoginOtp = async (req, res) => {
     try {
         // Validate body
@@ -309,13 +308,13 @@ exports.getAppUserForAdmin = async (req, res) => {
 
 exports.getAppUserForAdminById = async (req, res) => {
     try {
-        const student = await AppUser.findOne({
+        const appUser = await AppUser.findOne({
             paranoid: false,
             where: {
                 id: req.params.id
             }
         });
-        if (!student) {
+        if (!appUser) {
             return res.status(400).send({
                 success: false,
                 message: "User not found!"
@@ -324,7 +323,7 @@ exports.getAppUserForAdminById = async (req, res) => {
         res.status(200).send({
             success: true,
             message: "App user fetched successfully!",
-            data: student
+            data: appUser
         });
     } catch (err) {
         res.status(500).send({
@@ -336,7 +335,7 @@ exports.getAppUserForAdminById = async (req, res) => {
 
 exports.getSoftDeletedAppUser = async (req, res) => {
     try {
-        const student = await AppUser.findAll({
+        const appUser = await AppUser.findAll({
             paranoid: false,
             where: {
                 deletedAt: {
@@ -349,8 +348,8 @@ exports.getSoftDeletedAppUser = async (req, res) => {
         });
         res.status(200).send({
             success: true,
-            message: "All Soft Deleted students fetched successfully!",
-            data: student
+            message: "All Soft Deleted app user fetched successfully!",
+            data: appUser
         });
     } catch (err) {
         res.status(500).send({
