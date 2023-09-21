@@ -5,22 +5,21 @@ const { deleteSingleFile } = require("../../Util/deleteFile")
 const AdminCourse = db.adminCourse;
 const AdminCourseContent = db.adminCourseContent;
 const ContentNote = db.contentNotes;
-const AppUser_Course = db.appUser_Course;
 
 exports.addCourse = async (req, res) => {
     try {
         // Validate body
-        // const { error } = addAdminCourse(req.body);
-        // if (error) {
-        //     if (req.files.courseImage) {
-        //         deleteSingleFile(req.files.courseImage[0].path);
-        //     }
-        //     if (req.files.teacherImage) {
-        //         deleteSingleFile(req.files.teacherImage[0].path);
-        //     }
-        //     console.log(error);
-        //     return res.status(400).send(error.details[0].message);
-        // }
+        const { error } = addAdminCourse(req.body);
+        if (error) {
+            if (req.files.courseImage) {
+                deleteSingleFile(req.files.courseImage[0].path);
+            }
+            if (req.files.teacherImage) {
+                deleteSingleFile(req.files.teacherImage[0].path);
+            }
+            console.log(error);
+            return res.status(400).send(error.details[0].message);
+        }
         const { category, coursePrice, heading, description, level, language, courseName, duration, introVideoLink, coupen, topic, teacherName } = req.body;
         if (req.files.courseImage && req.files.teacherImage) {
             await AdminCourse.create({
@@ -316,38 +315,30 @@ exports.deleteCourse = async (req, res) => {
 // for appUser
 exports.getCourseContentForAppUser = async (req, res) => {
     try {
-        const courseId = req.params.id;
-        const appUserId = req.appUser.id;
-        const isCourse = await AppUser_Course.findOne({
+        const course = await AdminCourse.findOne({
             where: {
-                courseId: courseId,
-                appUserId: appUserId
-            }
+                id: req.params.id
+            },
+            include: [{
+                model: AdminCourseContent,
+                as: 'courseContent',
+                attributes: ['id', 'course', 'videoTitle', 'createdAt'],
+                order: [
+                    ['createdAt', 'ASC']
+                ]
+            }]
         });
-        if (!isCourse) {
-            res.status(400).send({
+        if (!course) {
+            return res.status(400).send({
                 success: false,
-                message: "You can't access this course!"
-            });
-        } else {
-            const course = await AdminCourse.findOne({
-                where: {
-                    id: req.params.id
-                },
-                include: [{
-                    model: AdminCourseContent,
-                    as: 'courseContent',
-                    order: [
-                        ['createdAt', 'ASC']
-                    ]
-                }]
-            });
-            res.status(200).send({
-                success: true,
-                message: "Course content fetched successfully!",
-                data: course
+                message: "Course is not present!"
             });
         }
+        res.status(200).send({
+            success: true,
+            message: "course fetched successfully!",
+            data: course
+        });
     } catch (err) {
         res.status(500).send({
             success: false,
@@ -355,3 +346,44 @@ exports.getCourseContentForAppUser = async (req, res) => {
         });
     }
 };
+
+//     try {
+//         const courseId = req.params.id;
+//         const appUserId = req.appUser.id;
+//         const isCourse = await AppUser_Course.findOne({
+//             where: {
+//                 courseId: courseId,
+//                 appUserId: appUserId
+//             }
+//         });
+//         if (!isCourse) {
+//             res.status(400).send({
+//                 success: false,
+//                 message: "You can't access this course!"
+//             });
+//         } else {
+//             const course = await AdminCourse.findOne({
+//                 where: {
+//                     id: req.params.id
+//                 },
+//                 include: [{
+//                     model: AdminCourseContent,
+//                     as: 'courseContent',
+//                     order: [
+//                         ['createdAt', 'ASC']
+//                     ]
+//                 }]
+//             });
+//             res.status(200).send({
+//                 success: true,
+//                 message: "Course content fetched successfully!",
+//                 data: course
+//             });
+//         }
+//     } catch (err) {
+//         res.status(500).send({
+//             success: false,
+//             message: err.message
+//         });
+//     }
+// };eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMzNjI3OTNlLTE4YTQtNGVhMS1iM2EyLWY4ZTkyYTJkNjZhMCIsImVtYWlsIjoiYW5rdXNoQGdtYWlsLmNvbSIsImNvZGUiOiJBRE1JTjEwMDAiLCJpYXQiOjE2OTUxMDMyNjQsImV4cCI6MTY5NTUzNTI2NH0.PJprSPlOu9Cin-6hYtnMeiCgR0UQI-RgvBGIdCpvaxE

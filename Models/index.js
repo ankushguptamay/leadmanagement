@@ -140,4 +140,6 @@ db.contentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 
 // queryInterface.addColumn('appUsers', "profileImage_Name", { type: DataTypes.STRING(1234) });
 // queryInterface.addColumn('appUsers', "profileImage_FileName", { type: DataTypes.STRING(1234) });
 
+queryInterface.removeColumn('adminCourseContents', "subject");
+
 module.exports = db;

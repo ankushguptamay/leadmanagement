@@ -1,5 +1,6 @@
 const db = require('../../Models');
 const ContentNote = db.contentNotes;
+const AppUser_Course = db.appUser_Course;
 const { deleteSingleFile } = require('../../Util/deleteFile');
 
 exports.addContentNotes = async (req, res) => {
@@ -64,6 +65,7 @@ exports.deleteNote = async (req, res) => {
     }
 }
 
+// for admin
 exports.getNoteByContent = async (req, res) => {
     try {
         const notes = await ContentNote.findAll({
@@ -78,6 +80,48 @@ exports.getNoteByContent = async (req, res) => {
             data: notes
         });
 
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+// for appUser
+exports.getNoteByContentForAppUser = async (req, res) => {
+    try {
+        const notes = await ContentNote.findAll({
+            where: {
+                contentId: req.params.id
+            }
+        });
+        if (!notes) {
+            return res.status(400).send({
+                success: true,
+                message: "Content notes is not present!"
+            });
+        }
+        const courseId = notes.courseId;
+        const appUserId = req.appUser.id;
+        const isCourse = await AppUser_Course.findOne({
+            where: {
+                courseId: courseId,
+                appUserId: appUserId
+            }
+        });
+        if (!isCourse) {
+            res.status(400).send({
+                success: false,
+                message: "You can't access this notes! Please purchase this!"
+            });
+        } else {
+            res.status(200).send({
+                success: true,
+                message: "Content notes fetched successfully!",
+                data: notes
+            });
+        }
     } catch (err) {
         res.status(500).send({
             success: false,

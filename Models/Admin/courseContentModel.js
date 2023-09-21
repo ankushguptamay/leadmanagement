@@ -16,9 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         videoType:{
             type:DataTypes.STRING
-        },
-        subject:{
-            type:DataTypes.JSON
         }
     })
     return AdminCourseContent;

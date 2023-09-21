@@ -1,7 +1,8 @@
 const express = require('express');
 const { register, loginAppUser, verifyLoginOtp, getAppUserForAppUser, addOrUpdateProfileImage, removeProfileImage } = require('../Controller/AppUser/appUserController');
 const { getAllCourse, getCourseContentForAppUser } = require('../Controller/Admin/courseController');
-const { getNoteByContent } = require('../Controller/Admin/contentNotesController');
+const { getNoteByContentForAppUser } = require('../Controller/Admin/contentNotesController');
+const { getCourseContentByContentId } = require('../Controller/Admin/courseContentController');
 const { getAllBanner } = require('../Controller/Admin/Master/bannerController');
 const { getAllCategory } = require('../Controller/Admin/Master/categoryController');
 const { getAllAppointmentBanner } = require('../Controller/Admin/Master/appointmentBannerCont');
@@ -24,7 +25,10 @@ appUser.delete("/removeProfileImage", jwt.verifyAppUserJWT, isAppUserPresent, re
 
 appUser.get("/getAllCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAllCourse);
 appUser.get("/getCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseContentForAppUser);
-appUser.get("/getNotes/:id", jwt.verifyAppUserJWT, isAppUserPresent, getNoteByContent);
+appUser.get("/content/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseContentByContentId); // contentId
+appUser.get("/getNotes/:id", jwt.verifyAppUserJWT, isAppUserPresent, getNoteByContentForAppUser); // contentId
+appUser.get("/myCourses", jwt.verifyAppUserJWT, isAppUserPresent, getAssignCourse);
+appUser.post("/purchaseCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, purchaseCourse);
 
 appUser.post("/bookAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookAppUserAppointment);
 appUser.get("/getAppointmentSlote", jwt.verifyAppUserJWT, isAppUserPresent, getSloteByDateForPatient);
@@ -33,8 +37,5 @@ appUser.get("/myBookedAppointment", jwt.verifyAppUserJWT, isAppUserPresent, getM
 appUser.get("/getAllAppointmentBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllAppointmentBanner);
 appUser.get("/getAllCategory", jwt.verifyAppUserJWT, isAppUserPresent, getAllCategory);
 appUser.get("/getAllBanner", jwt.verifyAppUserJWT, isAppUserPresent, getAllBanner);
-
-appUser.get("/getAssignCourse", jwt.verifyAppUserJWT, isAppUserPresent, getAssignCourse);
-appUser.post("/purchaseCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, purchaseCourse);
 
 module.exports = appUser;

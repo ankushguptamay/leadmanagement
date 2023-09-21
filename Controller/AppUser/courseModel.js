@@ -85,7 +85,7 @@ exports.purchaseCourse = async (req, res) => {
     try {
         await AppUser_Course.create({
             createrCode: null,
-            courseId: courseId,
+            courseId: req.params.id,
             appUserId: req.appUser.id
         });
         res.status(200).send({

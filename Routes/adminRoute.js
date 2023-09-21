@@ -80,7 +80,7 @@ leadManagement.get("/bookedSloteByDate", jwt.verifyJWT, isAdminPresent, bookedSl
 leadManagement.get("/availableSlote", jwt.verifyJWT, isAdminPresent, availableSlote);
 leadManagement.delete("/deleteSlote/:sloteId", jwt.verifyJWT, isAdminPresent, deleteSlote); // id
 
-leadManagement.post("/addCourseContent", jwt.verifyJWT, isAdminPresent, addCourseContent);
+leadManagement.post("/addCourseContent", jwt.verifyJWT, isAdminPresent, uploadPDF.array('contentNotes', 12), addCourseContent);
 leadManagement.get("/courseContent/:courseId", jwt.verifyJWT, isAdminPresent, getCourseContentByCourseId);
 leadManagement.put("/updateContent/:id", jwt.verifyJWT, isAdminPresent, updateCourseContent);
 leadManagement.delete("/deleteContent/:id", jwt.verifyJWT, isAdminPresent, deleteCourseContent);
