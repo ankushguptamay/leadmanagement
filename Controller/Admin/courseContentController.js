@@ -34,9 +34,9 @@ exports.addCourseContent = async (req, res) => {
         for (let i = 0; i < file.length; i++) {
             await ContentNote.create({
                 note_MimeType: file[i].mimetype,
-                note_Path: file.path,
-                note_Name: file.originalname,
-                note_FileName: file.filename,
+                note_Path: file[i].path,
+                note_Name: file[i].originalname,
+                note_FileName: file[i].filename,
                 courseId: courseId,
                 contentId: content.id
             });

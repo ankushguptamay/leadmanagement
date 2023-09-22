@@ -116,7 +116,6 @@ exports.addAdminCourse = (data) => {
 exports.addAdminCourseContent = (data) => {
     const schema = joi.object().keys({
         course: joi.string().required(),
-        subject: joi.array().required(),
         videoType: joi.string().required(),
         videoLink: joi.string().required(),
         videoTitle: joi.string().required(),
