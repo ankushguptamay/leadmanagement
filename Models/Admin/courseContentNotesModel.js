@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         note_Name: {
             type: DataTypes.STRING
         },
-        note_Path_FileName: {
+        note_FileName: {
             type: DataTypes.STRING(1234)
         },
         note_MimeType: {
