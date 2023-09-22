@@ -140,7 +140,7 @@ db.contentNotes.belongsTo(db.adminCourseContent, { foreignKey: 'contentId', as: 
 // queryInterface.addColumn('appUsers', "profileImage_Name", { type: DataTypes.STRING(1234) });
 // queryInterface.addColumn('appUsers', "profileImage_FileName", { type: DataTypes.STRING(1234) });
 
-queryInterface.removeColumn('contentNotes', "note_Path_FileName");
-queryInterface.addColumn('contentNotes', "note_FileName", { type: DataTypes.STRING(1234) });
+// queryInterface.removeColumn('contentNotes', "note_Path_FileName");
+// queryInterface.addColumn('contentNotes', "note_FileName", { type: DataTypes.STRING(1234) });
 
 module.exports = db;
