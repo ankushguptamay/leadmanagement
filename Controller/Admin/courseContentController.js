@@ -31,7 +31,7 @@ exports.addCourseContent = async (req, res) => {
             courseId: courseId,
             createrCode: req.user.code
         });
-        for (let i = 0; i < file; i++) {
+        for (let i = 0; i < file.length; i++) {
             await ContentNote.create({
                 note_MimeType: file[i].mimetype,
                 note_Path: file.path,
@@ -190,10 +190,16 @@ exports.getCourseContentByContentId = async (req, res) => {
                 message: "You can't access this content! Please purchase this!"
             });
         } else {
+            const numberOfNotes = await ContentNote.count({
+                where: {
+                    contentId: contentId
+                }
+            });
             res.status(200).send({
                 success: true,
                 message: "Course content fetched successfully!",
-                data: content
+                data: content,
+                numberOfNotes: numberOfNotes
             });
         }
     } catch (err) {

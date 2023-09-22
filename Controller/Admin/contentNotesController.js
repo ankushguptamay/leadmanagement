@@ -13,7 +13,7 @@ exports.addContentNotes = async (req, res) => {
         }
         const { contentId, courseId } = req.body;
         const file = req.files;
-        for (let i = 0; i < file; i++) {
+        for (let i = 0; i < file.length; i++) {
             await ContentNote.create({
                 note_MimeType: file[i].mimetype,
                 note_Path: file.path,
@@ -70,7 +70,7 @@ exports.getNoteByContent = async (req, res) => {
     try {
         const notes = await ContentNote.findAll({
             where: {
-                contentIdd: req.params.id
+                contentId: req.params.id
             }
         });
 
@@ -96,13 +96,13 @@ exports.getNoteByContentForAppUser = async (req, res) => {
                 contentId: req.params.id
             }
         });
-        if (!notes) {
+        if (notes.length <= 0) {
             return res.status(400).send({
                 success: true,
-                message: "Content notes is not present!"
+                message: "Content notes are not present!"
             });
         }
-        const courseId = notes.courseId;
+        const courseId = notes[0].courseId;
         const appUserId = req.appUser.id;
         const isCourse = await AppUser_Course.findOne({
             where: {
