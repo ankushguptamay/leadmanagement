@@ -386,4 +386,35 @@ exports.getCourseContentForAppUser = async (req, res) => {
 //             message: err.message
 //         });
 //     }
-// };eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMzNjI3OTNlLTE4YTQtNGVhMS1iM2EyLWY4ZTkyYTJkNjZhMCIsImVtYWlsIjoiYW5rdXNoQGdtYWlsLmNvbSIsImNvZGUiOiJBRE1JTjEwMDAiLCJpYXQiOjE2OTUxMDMyNjQsImV4cCI6MTY5NTUzNTI2NH0.PJprSPlOu9Cin-6hYtnMeiCgR0UQI-RgvBGIdCpvaxE
+// };
+
+exports.getCourseByCategory = async (req, res) => {
+    try {
+        const category = req.query.category;
+        if (category) {
+            const course = await AdminCourse.findAll({
+                where: {
+                    category: category
+                },
+                order: [
+                    ['createdAt', 'ASC']
+                ]
+            });
+            res.status(200).send({
+                success: true,
+                message: "Course fetched successfully!",
+                data: course
+            });
+        } else {
+            res.status(400).send({
+                success: false,
+                message: "Please select a category!"
+            });
+        }
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: err.message
+        });
+    }
+};

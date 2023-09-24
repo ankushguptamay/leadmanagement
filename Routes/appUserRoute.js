@@ -1,6 +1,6 @@
 const express = require('express');
 const { register, loginAppUser, verifyLoginOtp, getAppUserForAppUser, addOrUpdateProfileImage, removeProfileImage } = require('../Controller/AppUser/appUserController');
-const { getAllCourse, getCourseContentForAppUser } = require('../Controller/Admin/courseController');
+const { getAllCourse, getCourseContentForAppUser, getCourseByCategory } = require('../Controller/Admin/courseController');
 const { getNoteByContentForAppUser } = require('../Controller/Admin/contentNotesController');
 const { getCourseContentByContentId } = require('../Controller/Admin/courseContentController');
 const { getAllBanner } = require('../Controller/Admin/Master/bannerController');
@@ -28,6 +28,7 @@ appUser.get("/getCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseC
 appUser.get("/content/:id", jwt.verifyAppUserJWT, isAppUserPresent, getCourseContentByContentId); // contentId
 appUser.get("/getNotes/:id", jwt.verifyAppUserJWT, isAppUserPresent, getNoteByContentForAppUser); // contentId
 appUser.get("/myCourses", jwt.verifyAppUserJWT, isAppUserPresent, getAssignCourse);
+appUser.get("/getCourseByCategory", jwt.verifyAppUserJWT, isAppUserPresent, getCourseByCategory);
 appUser.post("/purchaseCourse/:id", jwt.verifyAppUserJWT, isAppUserPresent, purchaseCourse);
 
 appUser.post("/bookAppointment/:sloteId", jwt.verifyAppUserJWT, isAppUserPresent, bookAppUserAppointment);
